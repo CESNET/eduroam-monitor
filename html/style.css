@@ -154,8 +154,6 @@ li.level1 {
 .main {
   border-top: 12px solid #00658d;
   min-height: 100%;
-}
-p {
   padding-left: 10px;
 }
 #cesnet_linker_placeholder {
