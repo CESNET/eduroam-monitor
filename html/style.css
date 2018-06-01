@@ -1,26 +1,10 @@
-#font .bold,#font .light,#font .normal,body{font-style:normal}
-
-body,html{padding:0;margin:0;height:100%}
-
+body{padding:0;margin:0;height:100%}
+html{padding:0;margin:0;min-height:100%}
 *,body,html{box-sizing:border-box}
-
 img{max-width:100%;height:auto;vertical-align:middle;border:0}
-
 *{border-collapse:collapse}
-
-
-/*
-@font-face{font-family:"PT Serif Caption";font-style:normal;font-weight:400;src:local("Cambria"),local("PT Serif Caption"),local("PTSerif-Caption"),url(https://themes.googleusercontent.com/static/fonts/ptserifcaption/v6/7xkFOeTxxO1GMC1suOUYWWhBabBbEjGd1iRmpyoZukE.woff)format('woff')}
-@font-face{font-family:"Open Sans Light";font-style:normal;font-weight:300;src:local("Segoe UI Light"),local("Open Sans Light"),local("OpenSans-Light"),url(https://themes.googleusercontent.com/static/fonts/opensans/v8/DXI1ORHCpsQm3Vp6mXoaTZ1r3JsPcQLi8jytr04NNhU.woff)format('woff')}
-@font-face{font-family:"Open Sans";font-style:normal;font-weight:400;src:local("Segoe UI"),local("Open Sans"),local("OpenSans"),url(https://themes.googleusercontent.com/static/fonts/opensans/v8/K88pR3goAWT7BTt32Z01mz8E0i7KZn-EPnyo3HZu7kw.woff)format('woff')}
-@font-face{font-family:"Open Sans Bold";font-style:normal;font-weight:700;src:local("Segoe UI Bold"),local("Open Sans Bold"),local("OpenSans-Bold"),url(https://themes.googleusercontent.com/static/fonts/opensans/v8/k3k702ZOKiLJc3WVjuplzJ1r3JsPcQLi8jytr04NNhU.woff)format('woff')}
-*/
-
-/*
-*/
 html{font-size:100%}
 body{font-family:"Segoe UI","Open Sans",sans-serif,serif;font-size:.875rem;line-height:1.1;font-weight:400}
-
 td.nowrap {
   white-space: nowrap;
 }
@@ -48,9 +32,10 @@ h1 {
   line-height: 1.2;
 }
 #dokuwiki__footer {
-  position: relative;
+  position: absolute;
   overflow: hidden;
   width: 100%;
+  bottom: 0;
   height: 320px;
   /* margin: -320px 0 0; */ /* musi byt vypnuto pro spravne umisteni paticky a neprekryvani ostatnich elementu */
   clear: both;
@@ -173,3 +158,8 @@ li.level1 {
 p {
   padding-left: 10px;
 }
+#cesnet_linker_placeholder {
+  min-height: 45px;
+  background-color: #4B4D4A;
+}
+
