@@ -153,22 +153,8 @@ function graph_heat_map($scope)
   // ==========================================================
 
   var data = $scope.graph_data;
-  var max = 99;     // TODO ?
   var t = d3.transition().duration(1500);
   
-  // ==========================================================
-
-  if($scope.form_data.log_scale) {
-    var colorScale = d3.scaleLog()
-        .domain([1, max])
-        .range([d3.interpolateBlues(0), d3.interpolateBlues(1)])
-  }
-  else {
-    var colorScale = d3.scaleLinear()
-        .domain([0, max])
-        .range([d3.interpolateBlues(0), d3.interpolateBlues(1)])
-  }
-
   // icingaweb2 colors
   var colors = [ "#44bb77", "#ffaa44", "#ff5566" ];
   colors[99] = "#77aaff";
