@@ -70,6 +70,15 @@ function prepare_data($scope, response)
 function init_tips($scope)
 {
   var svg = d3.select("body").append("svg");
+  var colors = [ "#44bb77", "#ffaa44", "#ff5566" ];
+  colors[99] = "#77aaff";
+
+  var tip_arr = [
+    { html : " <span style='color:" + colors[0]  + "'>", text : "OK" },
+    { html : " <span style='color:" + colors[1]  + "'>", text : "WARNING" },
+    { html : " <span style='color:" + colors[2]  + "'>", text : "CRITICAL" },
+  ]
+  tip_arr[99] = { html : " <span style='color:" + colors[99] + "'>", text : "PENDING" };
 
   // row tooltip
   var row_tip = d3.tip()
@@ -103,7 +112,8 @@ function init_tips($scope)
     .offset([-10, 0])
     .html(function(d) {
       return "<strong>server:</strong> " + $scope.radius_servers[d.row] + ", <strong>návštěvník z instituce:</strong> " + $scope.realms[d.col] +
-             " <span style='color:red'>" + d.value + "</span>";
+             tip_arr[d.value].html + tip_arr[d.value].text + "</span>";
+             //" <span style='color:red'>" + d.value + "</span>";
   })
 
   svg.call(cell_tip);
