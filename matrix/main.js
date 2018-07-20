@@ -9,7 +9,7 @@ angular.module('matrix').controller('matrix_controller', ['$scope', '$http', fun
 
   $http({
     method  : 'GET',
-    url     : 'https://monitor.eduroam.cz/matrix_data.json'
+    url     : 'https://monitor.eduroam.cz/matrix/data.json'
   })
   .then(function(response) {
     for(i in response.data) {
