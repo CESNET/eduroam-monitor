@@ -2,7 +2,6 @@
 angular.module('matrix', []);
 /* --------------------------------------------------------------------------------- */
 angular.module('matrix').controller('matrix_controller', ['$scope', '$http', function ($scope, $http) {
-
   $scope.radius_servers = [];
   $scope.realms = [];
   $scope.loading = true;
@@ -28,37 +27,12 @@ angular.module('matrix').controller('matrix_controller', ['$scope', '$http', fun
 function prepare_data($scope, data)
 {
   $scope.radius_servers.sort();
-
-  // --------------------------------------------------------------------------------------
-  //$scope.realms = [ "domena1", "domena2", "domena3" ];
-  //$scope.visinst = [ "domena1", "domena2", "domena3" ];
-  //$scope.graph_data = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
-  //$scope.graph_data = [ 
-  //  { row : 0, col : 0, value: 0},
-  //  { row : 0, col : 1, value: 1},
-  //  { row : 0, col : 2, value: 2},
-  //  { row : 1, col : 0, value: 3},
-  //  { row : 1, col : 1, value: 4},
-  //  { row : 1, col : 2, value: 5},
-  //  { row : 2, col : 0, value: 6},
-  //  { row : 2, col : 1, value: 7},
-  //  { row : 2, col : 2, value: 8},
-  //];
-
-  // format dat je nasledujici:
-  // $scope.graph_data je pole
-  // kazdy prvek pole je dict (indexovano od 0)
-  // v kazdem dictu jsou klice:
-  // row, col, value
-  // tyto klice odkazuji radek, sloupec a hodnotu na danem indexu (indexovano od 0)
-
   $scope.graph_data = [];
 
-  for(var i in data) {
+  for(var i in data)
     $scope.graph_data.push({ row : $scope.radius_servers.indexOf(data[i].host_name), 
                             col : $scope.realms.indexOf(data[i].service_description),
                             value : data[i].service_state });
-  }
 
   for(var i in $scope.realms)
     $scope.realms[i] = $scope.realms[i].substring(1);     // remove "@"
@@ -108,7 +82,6 @@ function graph_heat_map($scope)
 
   var data = $scope.graph_data;
   var max = 99;     // TODO ?
-  //var max = d3.max(data.map(function(d) { return d.value; }));
   
   // ==========================================================
 
@@ -177,9 +150,6 @@ function graph_heat_map($scope)
 
   // ==========================================================
 
-    //var rowSortOrder = false;
-    //var colSortOrder = false;
-
     var rowLabels = svg.append("g")
         .selectAll(".rowLabelg")
         .data(rowLabel)
@@ -194,10 +164,6 @@ function graph_heat_map($scope)
         .on('mouseover', row_tip.show)
         .on('mouseout', row_tip.hide)
         .on("click", function(d, i) { window.open(host_base + d); });
-        //.on("click", function(d, i) { 
-        //  rowSortOrder = !rowSortOrder; 
-        //  sortbylabel("r", i, rowSortOrder);
-        //});
 
   // ==========================================================
 
@@ -215,10 +181,6 @@ function graph_heat_map($scope)
         .on('mouseover', col_tip.show)
         .on('mouseout', col_tip.hide)
         .on("click", function(d, i) { window.open(service_group_base + d); });
-        //.on("click", function(d,i) { 
-        //  colSortOrder= !colSortOrder;  
-        //  sortbylabel("c", i, colSortOrder);
-        //});
 
   // ==========================================================
 
@@ -237,11 +199,6 @@ function graph_heat_map($scope)
           .on('mouseover', cell_tip.show)
           .on('mouseout', cell_tip.hide)
           .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
-          //console.log($scope.radius_servers[d.row]);
-          //console.log($scope.realms[d.col]);
-
-        //return "<strong>server:</strong> " + $scope.radius_servers[d.row] + ", <strong>návštěvník z instituce:</strong> " + $scope.realms[d.col] +
-        //       " <span style='color:red'>" + d.value + "</span>";
 
   // ==========================================================
 }
