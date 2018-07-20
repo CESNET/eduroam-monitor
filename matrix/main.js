@@ -1,16 +1,37 @@
 /* --------------------------------------------------------------------------------- */
 angular.module('matrix', []);
 /* --------------------------------------------------------------------------------- */
-angular.module('matrix').controller('matrix_controller', ['$scope', '$http', function ($scope, $http) {
+angular.module('matrix').controller('matrix_controller', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   $scope.radius_servers = [];
   $scope.realms = [];
   $scope.loading = true;
-
+  init_tips($scope)
+  get_data($scope, $http, $timeout);
+}]);
+/* --------------------------------------------------------------------------------- */
+// get data, simple json data file is used
+/* --------------------------------------------------------------------------------- */
+function get_data($scope, $http, $timeout)
+{
   $http({
     method  : 'GET',
-    url     : 'https://monitor.eduroam.cz/matrix/data.json'
+    url     : '/matrix/data.json'
   })
   .then(function(response) {
+    prepare_data($scope, response);
+    graph_heat_map($scope);
+
+    $timeout(function() {
+      get_data($scope, $http, $timeout);
+    }, 60000);
+  });
+}
+/* --------------------------------------------------------------------------------- */
+// prepare data for d3 graph
+/* --------------------------------------------------------------------------------- */
+function prepare_data($scope, response)
+{
+  if($scope.radius_servers.length == 0) { // no radius servers, page was just displayed
     for(i in response.data) {
       if($scope.radius_servers.indexOf(response.data[i].host_name) == -1)
         $scope.radius_servers.push(response.data[i].host_name);
@@ -18,35 +39,86 @@ angular.module('matrix').controller('matrix_controller', ['$scope', '$http', fun
       if($scope.realms.indexOf(response.data[i].service_description) == -1)
         $scope.realms.push(response.data[i].service_description);
     }
-    prepare_data($scope, response.data);
-    $scope.loading = false;
-    graph_heat_map($scope);
-  });
-}]);
-/* --------------------------------------------------------------------------------- */
-function prepare_data($scope, data)
-{
-  $scope.radius_servers.sort();
-  $scope.graph_data = [];
 
-  for(var i in data)
-    $scope.graph_data.push({ row : $scope.radius_servers.indexOf(data[i].host_name), 
-                            col : $scope.realms.indexOf(data[i].service_description),
-                            value : data[i].service_state });
+    $scope.radius_servers.sort();
+  }
 
-  for(var i in $scope.realms)
-    $scope.realms[i] = $scope.realms[i].substring(1);     // remove "@"
+  if(!$scope.graph_data) {       // no graph data, page was just displayed
+    $scope.graph_data = [];
+
+    for(var i in response.data)
+      $scope.graph_data.push({ row : $scope.radius_servers.indexOf(response.data[i].host_name),
+                              col : $scope.realms.indexOf(response.data[i].service_description),
+                              value : response.data[i].service_state });
+
+    for(var i in $scope.realms)
+      $scope.realms[i] = $scope.realms[i].substring(1);     // remove "@"
+  }
+
+  else {
+    for(var i in response.data)
+      if($scope.graph_data[i].value != response.data[i].service_state)
+        $scope.graph_data[i].value = response.data[i].service_state;         // assign new value
+  }
 
   $scope.form_data = {}; 
   $scope.form_data.log_scale = true;
 }
 /* --------------------------------------------------------------------------------- */
+// initialize tips
 /* --------------------------------------------------------------------------------- */
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
+function init_tips($scope)
+{
+  var svg = d3.select("body").append("svg");
+
+  // row tooltip
+  var row_tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+    return "<strong>server:</strong> <span style='color:red'>" + d + "</span>";
+  })
+
+  svg.call(row_tip);
+
+  // ==========================================================
+
+  // col tooltip
+  var col_tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset(function(d) {
+      return [ - this.getComputedTextLength() / 2 - 15, 10];
+    })
+    .html(function(d) {
+    return "<strong>návštěvník z instituce:</strong> <span style='color:red'>" + d + "</span>";
+  })
+
+  svg.call(col_tip);
+
+  // ==========================================================
+
+  // cell tooltip
+  var cell_tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+      return "<strong>server:</strong> " + $scope.radius_servers[d.row] + ", <strong>návštěvník z instituce:</strong> " + $scope.realms[d.col] +
+             " <span style='color:red'>" + d.value + "</span>";
+  })
+
+  svg.call(cell_tip);
+  // ==========================================================
+
+  $scope.svg = svg;
+  $scope.row_tip = row_tip;
+  $scope.col_tip = col_tip;
+  $scope.cell_tip = cell_tip;
+  $scope.svg_empty = true;
+}
+/* --------------------------------------------------------------------------------- */
 // draw heat map graph
 // based on http://bl.ocks.org/ianyfchang/8119685
-// --------------------------------------------------------------------------------------
+/* --------------------------------------------------------------------------------- */
 function graph_heat_map($scope)
 {
   // ==========================================================
@@ -82,6 +154,7 @@ function graph_heat_map($scope)
 
   var data = $scope.graph_data;
   var max = 99;     // TODO ?
+  var t = d3.transition().duration(1500);
   
   // ==========================================================
 
@@ -96,110 +169,79 @@ function graph_heat_map($scope)
         .range([d3.interpolateBlues(0), d3.interpolateBlues(1)])
   }
 
-    // icingaweb2 colors
-    var colors = [ "#44bb77", "#ffaa44", "#ff5566" ];
-    colors[99] = "#77aaff";
-
-  // ==========================================================
-   
-    var svg = d3.select("body").append("svg");
-
-    svg = svg.attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // icingaweb2 colors
+  var colors = [ "#44bb77", "#ffaa44", "#ff5566" ];
+  colors[99] = "#77aaff";
 
   // ==========================================================
 
-    // row tooltip
-    var row_tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .offset([-10, 0])
-      .html(function(d) {
-      return "<strong>server:</strong> <span style='color:red'>" + d + "</span>";
-    })
+  var svg = $scope.svg;
 
-    svg.call(row_tip);
+  if(!$scope.svg_empty) {    // graph present
+    d3.select(".map")
+          .selectAll("rect")
+          .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
+          .transition(t)
+          .style("fill", function(d) { return colors[d.value]; });
+    return;
+  }
 
-  // ==========================================================
-
-    // col tooltip
-    var col_tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .offset(function(d) {
-        return [ - this.getComputedTextLength() / 2 - 15, 10];
-      })
-      .html(function(d) {
-      return "<strong>návštěvník z instituce:</strong> <span style='color:red'>" + d + "</span>";
-    })
-
-    svg.call(col_tip);
-    
-  // ==========================================================
-    
-    // cell tooltip
-    var cell_tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .offset([-10, 0])
-      .html(function(d) {
-        return "<strong>server:</strong> " + $scope.radius_servers[d.row] + ", <strong>návštěvník z instituce:</strong> " + $scope.realms[d.col] +
-               " <span style='color:red'>" + d.value + "</span>";
-    })
-
-    svg.call(cell_tip);
+  svg = svg.attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   // ==========================================================
 
-    var rowLabels = svg.append("g")
-        .selectAll(".rowLabelg")
-        .data(rowLabel)
+  var rowLabels = svg.append("g")
+      .selectAll(".rowLabelg")
+      .data(rowLabel)
+      .enter()
+      .append("text")
+      .text(function (d) { return d; })
+      .attr("x", 0)
+      .attr("y", function (d, i) { return hcrow.indexOf(i) * cellSize; })
+      .style("text-anchor", "end")
+      .attr("transform", "translate(-6," + cellSize + ")")
+      .on('mouseover', $scope.row_tip.show)
+      .on('mouseout', $scope.row_tip.hide)
+      .on("click", function(d, i) { window.open(host_base + d); });
+
+  // ==========================================================
+
+  var colLabels = svg.append("g")
+      .selectAll(".colLabelg")
+      .data(colLabel)
+      .enter()
+      .append("text")
+      .text(function (d) { return d; })
+      .attr("x", 0)
+      .attr("y", function (d, i) { return hccol.indexOf(i) * cellSize; })
+      .style("text-anchor", "left")
+      .attr("transform", "translate(" + cellSize  + ",-6) rotate (-90)")
+      .on('mouseover', $scope.col_tip.show)
+      .on('mouseout', $scope.col_tip.hide)
+      .on("click", function(d, i) { window.open(service_group_base + d); });
+
+  // ==========================================================
+
+  var heatMap = svg.append("g").attr("class", "map")
+        .selectAll("rect")
+        .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
         .enter()
-        .append("text")
-        .text(function (d) { return d; })
-        .attr("x", 0)
-        .attr("y", function (d, i) { return hcrow.indexOf(i) * cellSize; })
-        .style("text-anchor", "end")
-        .attr("transform", "translate(-6," + cellSize + ")")
-        .attr("class", function (d, i) { return "rowLabel mono r" + i; })
-        .on('mouseover', row_tip.show)
-        .on('mouseout', row_tip.hide)
-        .on("click", function(d, i) { window.open(host_base + d); });
+        .append("rect")
+        .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
+        .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
+        .attr("class", " clickable" )
+        .attr("width", cellSize - 1)
+        .attr("height", cellSize - 1)
+        .style("fill", function(d) { return colors[d.value]; })
+        .on('mouseover', $scope.cell_tip.show)
+        .on('mouseout', $scope.cell_tip.hide)
+        .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
 
   // ==========================================================
-
-    var colLabels = svg.append("g")
-        .selectAll(".colLabelg")
-        .data(colLabel)
-        .enter()
-        .append("text")
-        .text(function (d) { return d; })
-        .attr("x", 0)
-        .attr("y", function (d, i) { return hccol.indexOf(i) * cellSize; })
-        .style("text-anchor", "left")
-        .attr("transform", "translate(" + cellSize  + ",-6) rotate (-90)")
-        .attr("class",  function (d,i) { return "colLabel mono c" + i; })
-        .on('mouseover', col_tip.show)
-        .on('mouseout', col_tip.hide)
-        .on("click", function(d, i) { window.open(service_group_base + d); });
-
-  // ==========================================================
-
-    var heatMap = svg.append("g").attr("class", "g3")
-          .selectAll(".cellg")
-          .data(data,function(d) { return d.row + ":" + d.col; })
-          .enter()
-          .append("rect")
-          .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
-          .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
-          .attr("class", function(d) { return "cell cell-border cr" + d.row + " cc" + d.col; })
-          .attr("class", "clickable")
-          .attr("width", cellSize - 1)
-          .attr("height", cellSize - 1)
-          .style("fill", function(d) { return colors[d.value]; })
-          .on('mouseover', cell_tip.show)
-          .on('mouseout', cell_tip.hide)
-          .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
-
-  // ==========================================================
+  $scope.loading = false;
+  $scope.svg_empty = false;
 }
 /* --------------------------------------------------------------------------------- */
