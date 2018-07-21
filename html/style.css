@@ -6,7 +6,6 @@ img{max-width:100%;height:auto;vertical-align:middle;border:0}
 html{font-size:100%}
 body{
   font-family:"Segoe UI","Open Sans",sans-serif,serif;
-  overflow:hidden;
 }
 #container {
     min-height:100%;
