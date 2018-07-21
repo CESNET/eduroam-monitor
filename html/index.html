@@ -6,102 +6,93 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <div id="container">
+      <!-- header -->
+      <div id="cesnet_linker_placeholder"></div>
+      <script type="text/javascript" async="" src="https://linker2.cesnet.cz/linker.js"></script>
+      <!-- end header -->
 
-    <!-- header -->
-
-    <div id="cesnet_linker_placeholder"></div>
-    <script type="text/javascript" async="" src="https://linker2.cesnet.cz/linker.js"></script>
-
-
-    <!-- content -->
-
-    <div class="main">
-      <h1>monitor.eduroam.cz</h1>
-
-	<p>
-	Tato stránka slouží jako rozcestník pro všechny další důležité odkazy související s infrastrukturou eduroam.cz.
-	</p>
-
+      <!-- content -->
+      <div class="main">
+        <h1>monitor.eduroam.cz</h1>
+        <p>
+        Tato stránka slouží jako rozcestník pro všechny další důležité odkazy související s infrastrukturou eduroam.cz.
+        </p>
         <ul>
           <li><a href="https://ermon.cesnet.cz/matrix">Matice dostupnosti</a></li>
-	  <p>
+          <p>
             Matice dostupnosti poskytuje rychlý a komplexní přehled o stavu institucí zapojených do infrastruktury eduroam.cz.
-	    Matice je založena na testovaní všech zapojených organizací vzájemně mezi sebou.
-	  </p>
-
-          <li><a href="https://ermon.cesnet.cz/nagios3">Monitoring</a></li>
-	  <p>
-	    Monitoring je určen pro správce z institucí a vyžaduje přihlášení.
+            Matice je založena na testovaní všech zapojených organizací vzájemně mezi sebou.
+          </p>
+              <li><a href="https://ermon.cesnet.cz/nagios3">Monitoring</a></li>
+          <p>
+            Monitoring je určen pro správce z institucí a vyžaduje přihlášení.
             Monitoring zajišťuje kontrolu stavů jednotlivých RADIUS serverů.
-	  </p>
-
-          <li><a href="https://ermon.cesnet.cz/roaming">Využívání <i>eduroam</i>.cz</a></li>
-	  <p>
-	    Statistiky využívání eduroamu v České republic v podobě grafů.
-	    Jsou dostupné grafy pro jednotlivé zapojené organizace.
-	  </p>
-
-          <li><a href="https://ermon.cesnet.cz/eps2">Spohlevivost IPsec spojení eduroam.cz</a></li>
-	  <p>
-	    TODO
-	  </p>
-
-          <li><a href="https://etlog.cesnet.cz/">Záznamy o uživatelské aktivitě</a></li>
-	  <p>
-	    Systém etlog slouží k nahlížení do zaznámů o uživatelské aktivitě.
-	    Systém je určen pro koncové uživatele i pro správce ze zapojených institucí.
-	  </p>
-
-          <li><a href="https://pripojovani.eduroam.cz/">Přehled stavu připojených organizací</a></li>
-	  <p>
-	    Přehled stavu připojených ogranizací je určen pro nově připojující se organizace, které mohou sami kontrolovat stav realizace svého připojování.
-	    Stránka je také schopna poskytnout komplexní přehled na základě zvolených parametrů.
-	  </p>
-
-          <li><a href="https://eduroam.cz/">Dokumentace</a></li>
-	  <p>
-	    Na webu eduroam.cz je umístěna dokumentace týkající se všeho spojeného s infrastrukturou eduroam.cz.
-	    Pokud si nebudetě s něčím vědět rady, zde byste měli najít odpověď.
-	  </p>
-
-        </ul>
-    </div>
-
-    <!-- footer -->
-
-    <div id="dokuwiki__footer">
-      <div class="pad wrapper">
-        <div class="cols">
-          <div class="col logo"><img src="/images/logo-cesnet.svg" width="300" alt=""/></div>
-          <div class="col">
-            <h1 id="links" class="sectionedit1">Rychlé odkazy</h1>
-            <div class="level1">
-              <ul>
-                <li class="level1">
-                  <div class="li"><a href="https://www.eduroam.cz/" title="https://www.eduroam.cz/" rel="nofollow" class="urlextern">eduroam.cz</a></div>
-                </li>
-                <li class="level1">
-                  <div class="li"><a href="https://ermon.cesnet.cz/" title="https://ermon.cesnet.cz/" rel="nofollow" class="urlextern">monitoring</a></div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col">
-            <h1 id="contact" class="sectionedit1">Kontakt</h1>
-            <div class="level1">
-              <p>CESNET, z. s. p. o.<br/>Zikova 4, 16000 Prague 6<br/>Tel: +420 224 352 994<br/>Fax: +420 224 320 269<br/><a href="mailto:info@cesnet.cz" title="info@cesnet.cz" class="mail">info@cesnet.cz</a></p>
-            </div>
-          </div>
-          <div class="col">
-            <h1 id="service_desk" class="sectionedit1">Service desk</h1>
-            <div class="level1">
-              <p>Tel: +420 224 352 994<br/>GSM: +420 602 252 531<br/>Fax: +420 224 313 211<br/><a href="mailto:support@cesnet.cz" title="support@cesnet.cz" class="mail">support@cesnet.cz</a></p>
-            </div>
-          </div>
-        </div>
-        <div class="copyright">© 1996–2018 CESNET, z. s. p. o.</div>
+          </p>
+              <li><a href="https://ermon.cesnet.cz/roaming">Využívání <i>eduroam</i>.cz</a></li>
+          <p>
+            Statistiky využívání eduroamu v České republic v podobě grafů.
+            Jsou dostupné grafy pro jednotlivé zapojené organizace.
+          </p>
+              <li><a href="https://ermon.cesnet.cz/eps2">Spohlevivost IPsec spojení eduroam.cz</a></li>
+          <p>
+            TODO
+          </p>
+              <li><a href="https://etlog.cesnet.cz/">Záznamy o uživatelské aktivitě</a></li>
+          <p>
+            Systém etlog slouží k nahlížení do zaznámů o uživatelské aktivitě.
+            Systém je určen pro koncové uživatele i pro správce ze zapojených institucí.
+          </p>
+              <li><a href="https://pripojovani.eduroam.cz/">Přehled stavu připojených organizací</a></li>
+          <p>
+            Přehled stavu připojených ogranizací je určen pro nově připojující se organizace, které mohou sami kontrolovat stav realizace svého připojování.
+            Stránka je také schopna poskytnout komplexní přehled na základě zvolených parametrů.
+          </p>
+              <li><a href="https://eduroam.cz/">Dokumentace</a></li>
+          <p>
+            Na webu eduroam.cz je umístěna dokumentace týkající se všeho spojeného s infrastrukturou eduroam.cz.
+            Pokud si nebudetě s něčím vědět rady, zde byste měli najít odpověď.
+          </p>
+          </ul>
       </div>
-    </div>
+      <!-- end content -->
 
+      <!-- footer -->
+      <div id="dokuwiki__footer">
+        <div class="pad wrapper">
+          <div class="cols">
+            <div class="col logo"><img src="/images/logo-cesnet.svg" width="300" alt=""/></div>
+            <div class="col">
+              <h1 id="links" class="sectionedit1">Rychlé odkazy</h1>
+              <div class="level1">
+                <ul>
+                  <li class="level1">
+                    <div class="li"><a href="https://www.eduroam.cz/" title="https://www.eduroam.cz/" rel="nofollow" class="urlextern">eduroam.cz</a></div>
+                  </li>
+                  <li class="level1">
+                    <div class="li"><a href="https://ermon.cesnet.cz/" title="https://ermon.cesnet.cz/" rel="nofollow" class="urlextern">monitoring</a></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col">
+              <h1 id="contact" class="sectionedit1">Kontakt</h1>
+              <div class="level1">
+                <p>CESNET, z. s. p. o.<br/>Zikova 4, 16000 Prague 6<br/>Tel: +420 224 352 994<br/>Fax: +420 224 320 269<br/><a href="mailto:info@cesnet.cz" title="info@cesnet.cz" class="mail">info@cesnet.cz</a></p>
+              </div>
+            </div>
+            <div class="col">
+              <h1 id="service_desk" class="sectionedit1">Service desk</h1>
+              <div class="level1">
+                <p>Tel: +420 224 352 994<br/>GSM: +420 602 252 531<br/>Fax: +420 224 313 211<br/><a href="mailto:support@cesnet.cz" title="support@cesnet.cz" class="mail">support@cesnet.cz</a></p>
+              </div>
+            </div>
+          </div>
+          <div class="copyright">© 1996–2018 CESNET, z. s. p. o.</div>
+        </div>
+      </div>
+      <!-- end footer -->
+
+    </div>
   </body>
 </html>

@@ -4,7 +4,14 @@ html{padding:0;margin:0;min-height:100%}
 img{max-width:100%;height:auto;vertical-align:middle;border:0}
 *{border-collapse:collapse}
 html{font-size:100%}
-body{font-family:"Segoe UI","Open Sans",sans-serif,serif;font-size:.875rem;line-height:1.1;font-weight:400}
+body{
+  font-family:"Segoe UI","Open Sans",sans-serif,serif;
+  overflow:hidden;
+}
+#container {
+    min-height:100%;
+    position:relative;
+}
 ul {
   display:table-row;
   list-style:none;
@@ -20,12 +27,17 @@ h1 {
   line-height: 1.2;
 }
 #dokuwiki__footer {
+  font-size:.875rem;
+  line-height:1.1;
+  font-weight:400
+
   position: absolute;
   overflow: hidden;
   width: 100%;
   bottom: 0;
   height: 320px;
-  /* margin: -320px 0 0; */ /* musi byt vypnuto pro spravne umisteni paticky a neprekryvani ostatnich elementu */
+  /* margin: -320px 0 0; */
+  /* musi byt vypnuto pro spravne umisteni paticky a neprekryvani ostatnich elementu */
   clear: both;
   padding: 40px 20px;
   background-color: #4b4d4a;
