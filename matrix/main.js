@@ -108,9 +108,9 @@ function init_tips($scope)
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<strong>server:</strong> " + $scope.radius_servers[d.row] + ", <strong>návštěvník z instituce:</strong> " + $scope.realms[d.col] +
+      return "<text style='font-size:small;'>server:</text><strong> " + $scope.radius_servers[d.row] +
+             ",</strong><text style='font-size:small;'> návštěvník z instituce: </text><strong>" + $scope.realms[d.col] + "</strong>," +
              tip_arr[d.value].html + tip_arr[d.value].text + "</span>";
-             //" <span style='color:red'>" + d.value + "</span>";
   })
 
   svg.call(cell_tip);
