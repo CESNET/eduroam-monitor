@@ -199,7 +199,8 @@ function graph_heat_map($scope)
       .attr("transform", "translate(-6," + cellSize + ")")
       .on('mouseover', $scope.row_tip.show)
       .on('mouseout', $scope.row_tip.hide)
-      .on("click", function(d, i) { window.open(host_base + d); });
+      .on("click", function(d, i) { window.open(host_base + d); })
+      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(host_base + d); });
 
   // ==========================================================
 
@@ -215,24 +216,26 @@ function graph_heat_map($scope)
       .attr("transform", "translate(" + cellSize  + ",-6) rotate (-90)")
       .on('mouseover', $scope.col_tip.show)
       .on('mouseout', $scope.col_tip.hide)
-      .on("click", function(d, i) { window.open(service_group_base + d); });
+      .on("click", function(d, i) { window.open(service_group_base + d); })
+      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_group_base + d); });
 
   // ==========================================================
 
   var heatMap = svg.append("g").attr("class", "map")
-        .selectAll("rect")
-        .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
-        .enter()
-        .append("rect")
-        .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
-        .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
-        .attr("class", " clickable" )
-        .attr("width", cellSize - 1)
-        .attr("height", cellSize - 1)
-        .style("fill", function(d) { return colors[d.value]; })
-        .on('mouseover', $scope.cell_tip.show)
-        .on('mouseout', $scope.cell_tip.hide)
-        .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
+      .selectAll("rect")
+      .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
+      .enter()
+      .append("rect")
+      .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
+      .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
+      .attr("class", " clickable" )
+      .attr("width", cellSize - 1)
+      .attr("height", cellSize - 1)
+      .style("fill", function(d) { return colors[d.value]; })
+      .on('mouseover', $scope.cell_tip.show)
+      .on('mouseout', $scope.cell_tip.hide)
+      .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); })
+      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
 
   // ==========================================================
   $scope.loading = false;
