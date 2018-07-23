@@ -60,9 +60,6 @@ function prepare_data($scope, response)
       if($scope.graph_data[i].value != response.data[i].service_state)
         $scope.graph_data[i].value = response.data[i].service_state;         // assign new value
   }
-
-  $scope.form_data = {}; 
-  $scope.form_data.log_scale = true;
 }
 /* --------------------------------------------------------------------------------- */
 // initialize tips
