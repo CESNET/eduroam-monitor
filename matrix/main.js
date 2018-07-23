@@ -67,13 +67,14 @@ function prepare_data($scope, response)
 function init_tips($scope)
 {
   var svg = d3.select("body").append("svg");
-  var colors = [ "#44bb77", "#ffaa44", "#ff5566" ];
+  var colors = [ "#44bb77", "#ffaa44", "#ff5566", "#aa44ff" ];
   colors[99] = "#77aaff";
 
   var tip_arr = [
     { html : " <span style='color:" + colors[0]  + "'>", text : "OK" },
     { html : " <span style='color:" + colors[1]  + "'>", text : "WARNING" },
     { html : " <span style='color:" + colors[2]  + "'>", text : "CRITICAL" },
+    { html : " <span style='color:" + colors[3]  + "'>", text : "UNKNOWN" },
   ]
   tip_arr[99] = { html : " <span style='color:" + colors[99] + "'>", text : "PENDING" };
 
@@ -163,7 +164,7 @@ function graph_heat_map($scope)
   var t = d3.transition().duration(1500);
   
   // icingaweb2 colors
-  var colors = [ "#44bb77", "#ffaa44", "#ff5566" ];
+  var colors = [ "#44bb77", "#ffaa44", "#ff5566", "#aa44ff" ];
   colors[99] = "#77aaff";
 
   // ==========================================================
