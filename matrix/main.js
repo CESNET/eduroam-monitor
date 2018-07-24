@@ -41,8 +41,6 @@ function prepare_data($scope, response)
       if($scope.realms.indexOf(response.data[i].service_description) == -1)
         $scope.realms.push(response.data[i].service_description);
     }
-
-    $scope.radius_servers.sort();
   }
 
   if(!$scope.graph_data) {       // no graph data, page was just displayed
