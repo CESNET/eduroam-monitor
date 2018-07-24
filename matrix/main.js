@@ -31,6 +31,8 @@ function get_data($scope, $http, $timeout)
 /* --------------------------------------------------------------------------------- */
 function prepare_data($scope, response)
 {
+  var val;
+
   if($scope.radius_servers.length == 0) { // no radius servers, page was just displayed
     for(i in response.data) {
       if($scope.radius_servers.indexOf(response.data[i].host_name) == -1)
@@ -46,19 +48,33 @@ function prepare_data($scope, response)
   if(!$scope.graph_data) {       // no graph data, page was just displayed
     $scope.graph_data = [];
 
-    for(var i in response.data)
+    for(var i in response.data) {
+      // if the last check was more than 4 hours ago, set it to unknown
+      if(response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
+        val = 3;        // unknown
+      else
+        val = response.data[i].service_state;
+
       $scope.graph_data.push({ row : $scope.radius_servers.indexOf(response.data[i].host_name),
                               col : $scope.realms.indexOf(response.data[i].service_description),
-                              value : response.data[i].service_state });
+                              value : val });
+    }
 
     for(var i in $scope.realms)
       $scope.realms[i] = $scope.realms[i].substring(1);     // remove "@"
   }
 
   else {
-    for(var i in response.data)
-      if($scope.graph_data[i].value != response.data[i].service_state)
-        $scope.graph_data[i].value = response.data[i].service_state;         // assign new value
+    for(var i in response.data) {
+      // if the last check was more than 4 hours ago, set it to unknown
+      if(response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
+        val = 3;        // unknown
+      else
+        val = response.data[i].service_state;
+
+      if($scope.graph_data[i].value != val)
+        $scope.graph_data[i].value = val;         // assign new value
+    }
   }
 }
 /* --------------------------------------------------------------------------------- */
