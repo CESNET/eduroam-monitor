@@ -230,8 +230,8 @@ function graph_heat_map($scope)
       .attr("transform", "translate(" + cellSize  + ",-6) rotate (-90)")
       .on('mouseover', $scope.col_tip.show)
       .on('mouseout', $scope.col_tip.hide)
-      .on("click", function(d, i) { window.open(service_group_base + d); })
-      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_group_base + d); });
+      .on("click", function(d, i) { window.open(service_group_base + d + "&limit=500"); })
+      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_group_base + d + "&limit=500"); });
 
   // ==========================================================
 
