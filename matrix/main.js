@@ -48,7 +48,7 @@ function prepare_data($scope, response)
 
     for(var i in response.data) {
       // if the last check was more than 4 hours ago, set it to unknown
-      if(response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
+      if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
         val = 3;        // unknown
       else
         val = response.data[i].service_state;
@@ -65,7 +65,7 @@ function prepare_data($scope, response)
   else {
     for(var i in response.data) {
       // if the last check was more than 4 hours ago, set it to unknown
-      if(response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
+      if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
         val = 3;        // unknown
       else
         val = response.data[i].service_state;
