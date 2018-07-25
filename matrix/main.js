@@ -157,7 +157,7 @@ function graph_heat_map($scope)
   // ==========================================================
   var service_group_base = "https://ermon2.cesnet.cz/monitoring/list/servicegroups#!/monitoring/list/services?servicegroup_name=";
   var host_base = "https://ermon2.cesnet.cz/monitoring/list/hosts#!/monitoring/host/show?host="
-  var service_base = "https://ermon2.cesnet.cz/monitoring/host/services?host=alpha.ujf.cas.cz#!/monitoring/service/show?host="
+  var service_base = "https://ermon2.cesnet.cz/monitoring/list/services#!/monitoring/service/show?host="
   // ==========================================================
 
   var rowLabel = $scope.radius_servers;
