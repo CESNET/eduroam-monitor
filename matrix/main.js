@@ -145,7 +145,7 @@ function graph_heat_map($scope)
 {
   // ==========================================================
   // right margin for timestamp
-  var margin = { top: 220, right: 250, bottom: 5, left: 230 };
+  var margin = { top: 220, right: 250, bottom: 5, left: 280 };
   var cellSize = 18;
 
   var col_number = $scope.realms.length;
