@@ -2,8 +2,6 @@
 angular.module('matrix', []);
 /* --------------------------------------------------------------------------------- */
 angular.module('matrix').controller('matrix_controller', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-  $scope.radius_servers = [];
-  $scope.realms = [];
   $scope.loading = true;
   init_tips($scope)
   get_data($scope, $http, $timeout);
@@ -27,52 +25,71 @@ function get_data($scope, $http, $timeout)
   });
 }
 /* --------------------------------------------------------------------------------- */
+// create new graph_data
+/* --------------------------------------------------------------------------------- */
+function create_graph_data($scope, response)
+{
+  var val;
+
+  $scope.graph_data = [];
+  $scope.radius_servers = [];
+  $scope.realms = [];
+
+  for(var i in response.data) {
+    if($scope.radius_servers.indexOf(response.data[i].host_name) == -1)
+      $scope.radius_servers.push(response.data[i].host_name);
+
+    if($scope.realms.indexOf(response.data[i].service_description) == -1)
+      $scope.realms.push(response.data[i].service_description);
+
+    // if the last check was more than 4 hours ago, set it to unknown
+    if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
+      val = 3;        // unknown
+    else
+      val = response.data[i].service_state;
+
+    $scope.graph_data.push({ row : $scope.radius_servers.indexOf(response.data[i].host_name),
+                            col : $scope.realms.indexOf(response.data[i].service_description),
+                            value : val });
+  }
+
+  for(var i in $scope.realms)
+    $scope.realms[i] = $scope.realms[i].substring(1);     // remove "@"
+
+  $scope.last_data_len = response.data.length;
+}
+/* --------------------------------------------------------------------------------- */
+// update graph data
+/* --------------------------------------------------------------------------------- */
+function update_graph_data($scope, response)
+{
+  var val;
+
+  for(var i in response.data) {
+    // if the last check was more than 4 hours ago, set it to unknown
+    if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
+      val = 3;        // unknown
+    else
+      val = response.data[i].service_state;
+
+    if($scope.graph_data[i].value != val)
+      $scope.graph_data[i].value = val;         // assign new value
+  }
+}
+/* --------------------------------------------------------------------------------- */
 // prepare data for d3 graph
 /* --------------------------------------------------------------------------------- */
 function prepare_data($scope, response)
 {
-  var val;
-
-  if($scope.radius_servers.length == 0) { // no radius servers, page was just displayed
-    for(i in response.data) {
-      if($scope.radius_servers.indexOf(response.data[i].host_name) == -1)
-        $scope.radius_servers.push(response.data[i].host_name);
-
-      if($scope.realms.indexOf(response.data[i].service_description) == -1)
-        $scope.realms.push(response.data[i].service_description);
-    }
-  }
-
   if(!$scope.graph_data) {       // no graph data, page was just displayed
-    $scope.graph_data = [];
-
-    for(var i in response.data) {
-      // if the last check was more than 4 hours ago, set it to unknown
-      if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
-        val = 3;        // unknown
-      else
-        val = response.data[i].service_state;
-
-      $scope.graph_data.push({ row : $scope.radius_servers.indexOf(response.data[i].host_name),
-                              col : $scope.realms.indexOf(response.data[i].service_description),
-                              value : val });
-    }
-
-    for(var i in $scope.realms)
-      $scope.realms[i] = $scope.realms[i].substring(1);     // remove "@"
+    create_graph_data($scope, response);
   }
-
   else {
-    for(var i in response.data) {
-      // if the last check was more than 4 hours ago, set it to unknown
-      if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
-        val = 3;        // unknown
-      else
-        val = response.data[i].service_state;
-
-      if($scope.graph_data[i].value != val)
-        $scope.graph_data[i].value = val;         // assign new value
+    if($scope.last_data_len != response.data.length) {   // servers or realms were added or removed
+      location.reload();        // reload the page
     }
+    else
+      update_graph_data($scope, response);
   }
 }
 /* --------------------------------------------------------------------------------- */
