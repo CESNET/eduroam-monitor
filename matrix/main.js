@@ -140,8 +140,8 @@ function init_tips($scope)
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<text style='font-size:small;'>server:</text><strong> " + $scope.radius_servers[d.row] +
-             ",</strong><text style='font-size:small;'> návštěvník z instituce: </text><strong>" + $scope.realms[d.col] + "</strong>," +
+      return "<text style='font-weight:normal;'>server:</text><strong> " + $scope.radius_servers[d.row] +
+             ",</strong><text style='font-weight:normal;'> návštěvník z instituce: </text><strong>" + $scope.realms[d.col] + "</strong>," +
              tip_arr[d.value].html + tip_arr[d.value].text + "</span>";
   })
 
