@@ -192,7 +192,7 @@ function graph_heat_map($scope)
   // ==========================================================
 
   var data = $scope.graph_data;
-  var t = d3.transition().duration(1500);
+  var t = d3.transition().duration(3000);
   
   // icingaweb2 colors
   var colors = [ "#44bb77", "#ffaa44", "#ff5566", "#aa44ff" ];
