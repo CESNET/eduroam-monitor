@@ -162,7 +162,7 @@ function graph_heat_map($scope)
 {
   // ==========================================================
   // right margin for timestamp
-  var margin = { top: 220, right: 250, bottom: 5, left: 280 };
+  var margin = { top: 220, right: 250, bottom: 200, left: 280 };
   var cellSize = 18;
 
   var col_number = $scope.realms.length;
@@ -219,6 +219,7 @@ function graph_heat_map($scope)
   // ==========================================================
 
   var rowLabels = svg.append("g")
+      .attr("class", " clickable")
       .selectAll(".rowLabelg")
       .data(rowLabel)
       .enter()
@@ -236,6 +237,7 @@ function graph_heat_map($scope)
   // ==========================================================
 
   var colLabels = svg.append("g")
+      .attr("class", " clickable")
       .selectAll(".colLabelg")
       .data(colLabel)
       .enter()
@@ -267,6 +269,23 @@ function graph_heat_map($scope)
       .on('mouseout', $scope.cell_tip.hide)
       .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); })
       .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
+
+  // ==========================================================
+  // legend
+
+    var ordinal = d3.scaleOrdinal()
+      .domain(["status = OK", "status = WARNING", "status = CRITICAL", "status = UNKNOWN", "status = PENDING"])
+      .range([ colors[0], colors[1], colors[2], colors[3], colors[99] ]);
+
+    svg.append("g")
+      .attr("class", "legendOrdinal")
+      .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 50) + ")");
+
+    var legend = d3.legendColor()
+      .scale(ordinal);
+
+    svg.select(".legendOrdinal")
+      .call(legend);
 
   // ==========================================================
   $scope.loading = false;

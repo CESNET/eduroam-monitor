@@ -25,9 +25,6 @@
   top: 100%;
   left: 0;
 }
-text:hover {
-    cursor: pointer;
-}
 .clickable:hover {
     cursor: pointer;
 }
