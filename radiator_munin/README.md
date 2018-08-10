@@ -3,8 +3,8 @@
 A Simple plugin for [munin](http://munin-monitoring.org/) to monitor radiator activity. Example output:
 ![example radiator_munin output](https://github.com/CESNET/eduroam-monitor/blob/master/radiator_munin/docs/example.png?raw=true)
 
-[Radiator](https://www.open.com.au/radiator/) RADIUS server supports reporting number of processed packets by SNMP, 
-first you need to configure it to listen on SNMP port:
+[Radiator](https://www.open.com.au/radiator/) RADIUS server supports reporting a number of processed packets by SNMP.
+First, you need to configure it to listen on SNMP port:
 ```radius.cfg
 <SNMPAgent>     
         BindAddress 192.1.2.3
@@ -27,4 +27,3 @@ root@radius1mng4:# cat /etc/munin/plugin-conf.d/radiator
 env.SNMP_SERVER         192.1.2.3
 env.SNMP_COMUNITY       super-secret
 ```
-
