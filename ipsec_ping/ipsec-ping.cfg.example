@@ -1,0 +1,10 @@
+# This is example configuration file for the ipsec-ping.pl
+
+LDAPServer     = 'ldap.example.com'
+LDAPServerPort = 636
+UseSSL         = 1
+BindDN         = 'uid=eduRoamConfigurator,ou=Special Users,dc=example,dc=com'
+BindPassword   = 'password'
+ServerBase     = 'ou=RADIUS Servers,o=eduRoam,o=apps,dc=example,dc=com'
+RealmsBase     = 'ou=Realms,o=eduRoam,o=apps,dc=example,dc=com'
+SendMail       = 1
