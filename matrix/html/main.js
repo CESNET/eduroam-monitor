@@ -65,7 +65,8 @@ function create_graph_data($scope, response)
 
     $scope.graph_data.push({ row : $scope.radius_servers.indexOf(response.data[i].host_name),
                             col : $scope.realms.indexOf(response.data[i].service_description),
-                            value : val });
+                            value : val,
+                            attempt : response.data[i].service_current_check_attempt });
   }
 
   for(var i in $scope.realms)
@@ -271,10 +272,12 @@ function graph_heat_map($scope)
       .selectAll("rect")
       .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
       .enter()
-      .append("rect")
+      .append("g");
+
+      heatMap.append("rect")
       .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
       .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
-      .attr("class", " clickable" )
+      .attr("class", " clickable")
       .attr("width", cellSize - 1)
       .attr("height", cellSize - 1)
       .style("fill", function(d) { return colors[d.value]; })
@@ -283,9 +286,26 @@ function graph_heat_map($scope)
       .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); })
       .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
 
+      // TODO
+
+      //heatMap.append("rect")
+      //.attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
+      //.attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
+      //.attr("class", " clickable" )
+      //.attr("width", cellSize / 4 + 2)
+      //.attr("height", cellSize / 4 + 2)
+      //.style("fill", function(d) { return colors[1]; });
+
+      //heatMap.append("text")
+      //.attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 15; })
+      //.attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 17; })
+      //.attr("text-anchor", "middle")
+      //.style("font-size", "14px")
+      //.style('fill', 'black')
+      //.text(function(d) { if(d.attempt != 3) return d.attempt; });
+
   // ==========================================================
   // legend
-
     var ordinal = d3.scaleOrdinal()
       .domain(["status = OK", "status = WARNING", "status = CRITICAL", "status = UNKNOWN", "status = PENDING"])
       .range([ colors[0], colors[1], colors[2], colors[3], colors[99] ]);

@@ -2,7 +2,7 @@
   [                                               
     split("\n")[]                  # transform csv input into array
   | split(",")                     # where first element has key names
-  | select(length==4)              # and other elements have values
+  | select(length==5)              # and other elements have values
   ]                                
   | {h:.[0], v:.[1:][]}            # {h:[keys], v:[values]}
   | [.h, (.v|map(tonumber?//.))]   # [ [keys], [values] ]
