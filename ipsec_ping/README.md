@@ -2,7 +2,7 @@
 
 A tool to draw simple graphs of IPsec reliability. The tool heavily depends on our configuration data stored in LDAP, we doubt about portability into other NREN.
 
-![example ipsec-ping output](https://github.com/CESNET/eduroam-monitor/blob/master/ipsec_ping/docs/example.png?raw=true =300x)
+![example ipsec-ping output](https://github.com/CESNET/eduroam-monitor/blob/master/ipsec_ping/docs/example.png?raw=true)
 
 On IPsec endpoint (NREN level RADIUS server) is periodically executed script [eduroam_ping.sh]() which reads existing SA (by using `setkey -DP`) and ping to all its peers. The output of `ping` command is feed into `logger` with `local5.info` priority. 
 
