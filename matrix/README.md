@@ -6,13 +6,13 @@ which could help easily diagnose problematic servers or realms and could also he
 
 Screenshot from original matrix below.
 
-![Screenshot](https://github.com/CESNET/eduroam-monitor/tree/master/matrix/orig_matrix.png "original matrix")
+![Screenshot](https://raw.githubusercontent.com/CESNET/eduroam-monitor/master/matrix/orig_matrix.png "original matrix")
 
 ## new setup
 
 It was decided that this should be preserved with the new monitoring setup. Original matrix was taken as a model.
 
-![Screenshot](https://github.com/CESNET/eduroam-monitor/tree/master/matrix/new_matrix.png "new matrix")
+![Screenshot](https://raw.githubusercontent.com/CESNET/eduroam-monitor/master/matrix/new_matrix.png "new matrix")
 
 ## how it works
 
