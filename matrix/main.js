@@ -1,6 +1,14 @@
 /* --------------------------------------------------------------------------------- */
 angular.module('matrix', []);
 /* --------------------------------------------------------------------------------- */
+// global variables
+/* --------------------------------------------------------------------------------- */
+// size of map cell
+var cellSize = 18;
+// icingaweb2 colors
+var colors = [ "#44bb77", "#ffaa44", "#ff5566", "#aa44ff" ];
+colors[99] = "#77aaff";
+/* --------------------------------------------------------------------------------- */
 angular.module('matrix').controller('matrix_controller', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   $scope.loading = true;
   init_tips($scope)
@@ -34,6 +42,11 @@ function create_graph_data($scope, response)
   $scope.graph_data = [];
   $scope.radius_servers = [];
   $scope.realms = [];
+  $scope.total_health = { 0  : 0,
+                          1  : 0,
+                          2  : 0,
+                          3  : 0,
+                          99 : 0 };
 
   for(var i in response.data) {
     if($scope.radius_servers.indexOf(response.data[i].host_name) == -1)
@@ -47,6 +60,8 @@ function create_graph_data($scope, response)
       val = 3;        // unknown
     else
       val = response.data[i].service_state;
+
+    $scope.total_health[val]++;
 
     $scope.graph_data.push({ row : $scope.radius_servers.indexOf(response.data[i].host_name),
                             col : $scope.realms.indexOf(response.data[i].service_description),
@@ -72,8 +87,12 @@ function update_graph_data($scope, response)
     else
       val = response.data[i].service_state;
 
-    if($scope.graph_data[i].value != val)
+
+    if($scope.graph_data[i].value != val) {
+      $scope.total_health[$scope.graph_data[i].value]--;    // decrement old value
       $scope.graph_data[i].value = val;         // assign new value
+      $scope.total_health[val]++;                           // increment new value
+    }
   }
 }
 /* --------------------------------------------------------------------------------- */
@@ -98,9 +117,6 @@ function prepare_data($scope, response)
 function init_tips($scope)
 {
   var svg = d3.select("body").append("svg");
-  var colors = [ "#44bb77", "#ffaa44", "#ff5566", "#aa44ff" ];
-  colors[99] = "#77aaff";
-
   var tip_arr = [
     { html : " <span style='color:" + colors[0]  + "'>", text : "OK" },
     { html : " <span style='color:" + colors[1]  + "'>", text : "WARNING" },
@@ -162,8 +178,7 @@ function graph_heat_map($scope)
 {
   // ==========================================================
   // right margin for timestamp
-  var margin = { top: 220, right: 250, bottom: 200, left: 280 };
-  var cellSize = 18;
+  var margin = { top: 220, right: 250, bottom: 240, left: 280 };
 
   var col_number = $scope.realms.length;
   var row_number = $scope.radius_servers.length;
@@ -193,10 +208,6 @@ function graph_heat_map($scope)
 
   var data = $scope.graph_data;
   var t = d3.transition().duration(3000);
-  
-  // icingaweb2 colors
-  var colors = [ "#44bb77", "#ffaa44", "#ff5566", "#aa44ff" ];
-  colors[99] = "#77aaff";
 
   // ==========================================================
 
@@ -208,6 +219,8 @@ function graph_heat_map($scope)
           .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
           .transition(t)
           .style("fill", function(d) { return colors[d.value]; });
+
+    update_health_status($scope);
     return;
   }
 
@@ -288,7 +301,70 @@ function graph_heat_map($scope)
       .call(legend);
 
   // ==========================================================
+  // health status
+  $scope.svg = svg;
+  add_health_status($scope);
+
+  // ==========================================================
   $scope.loading = false;
   $scope.svg_empty = false;
+}
+/* --------------------------------------------------------------------------------- */
+// create health status data
+/* --------------------------------------------------------------------------------- */
+function create_health_status_data($scope)
+{
+  var keys = Object.keys($scope.total_health);
+  var values = Object.values($scope.total_health);
+  var health_data = [];
+
+  for(var i in keys)
+    health_data.push({key : keys[i], val : values[i]});
+
+  return health_data;
+}
+/* --------------------------------------------------------------------------------- */
+// update health status
+/* --------------------------------------------------------------------------------- */
+function update_health_status($scope)
+{
+  var t = d3.transition().duration(3000);
+  var health_status = $scope.svg.selectAll('.health_status')
+    .selectAll("text")
+    .data(create_health_status_data($scope))
+    .transition(t)
+    .text(function (d) { return d.val; })
+}
+/* --------------------------------------------------------------------------------- */
+// display current overall health status
+/* --------------------------------------------------------------------------------- */
+function add_health_status($scope)
+{
+  $scope.svg.append("text")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 170) + ")")
+    .text("overall health status");
+
+  var health_status = $scope.svg.append("g")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 180) + ")")
+    .attr("class", "health_status")
+    .attr("width", 200)
+    .attr("height", 200)
+    .selectAll('.legend3')
+    .data(create_health_status_data($scope))
+    .enter()
+    .append('g')
+
+  health_status.append("rect")
+    .attr("width", cellSize * 3)
+    .attr("height", cellSize)
+    .attr("x", function(d, i) { return i * 3 * cellSize; })
+    .style("fill", function (d, i) { return colors[d.key]; })
+
+  health_status.append("text")
+    .attr("width", cellSize * 3)
+    .attr("height", cellSize)
+    .attr("x", function(d, i) { return i * 3 * cellSize + cellSize / 2; })
+    .attr("y", function(d, i) { return 2 * cellSize; })
+    .text(function (d) { return d.val; })
 }
 /* --------------------------------------------------------------------------------- */
