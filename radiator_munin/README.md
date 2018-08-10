@@ -1,6 +1,6 @@
 # radiator munin plugin
 
-A Simple plugin for [munin](http://munin-monitoring.org/) to monitor radiator activity. Example output:
+A Simple plugin for [munin](http://munin-monitoring.org/) to monitor [Radiator](https://www.open.com.au/radiator/) activity. Example output:
 ![example radiator_munin output](https://github.com/CESNET/eduroam-monitor/blob/master/radiator_munin/docs/example.png?raw=true)
 
 [Radiator](https://www.open.com.au/radiator/) RADIUS server supports reporting a number of processed packets by SNMP.
