@@ -38,6 +38,7 @@ function get_data($scope, $http, $timeout)
 function create_graph_data($scope, response)
 {
   var val;
+  var soft;
 
   $scope.graph_data = [];
   $scope.radius_servers = [];
@@ -55,18 +56,26 @@ function create_graph_data($scope, response)
     if($scope.realms.indexOf(response.data[i].service_description) == -1)
       $scope.realms.push(response.data[i].service_description);
 
+    soft = 0;
+
     // if the last check was more than 4 hours ago, set it to unknown
     if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
       val = 3;        // unknown
-    else
-      val = response.data[i].service_state;
+    else {
+      if(response.data[i].service_state_type == 0) {       // soft state
+        soft = response.data[i].service_state;
+        val = 0;        // set state to OK, current state is NOT ok, but only in soft state
+      }
+      else                                                // hard state
+        val = response.data[i].service_state;
+    }
 
     $scope.total_health[val]++;
 
     $scope.graph_data.push({ row : $scope.radius_servers.indexOf(response.data[i].host_name),
                             col : $scope.realms.indexOf(response.data[i].service_description),
                             value : val,
-                            attempt : response.data[i].service_current_check_attempt });
+                            soft : soft });
   }
 
   for(var i in $scope.realms)
@@ -80,14 +89,20 @@ function create_graph_data($scope, response)
 function update_graph_data($scope, response)
 {
   var val;
+  var soft;
 
   for(var i in response.data) {
     // if the last check was more than 4 hours ago, set it to unknown
     if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
       val = 3;        // unknown
-    else
-      val = response.data[i].service_state;
-
+    else {
+      if(response.data[i].service_state_type == 0) {       // soft state
+        soft = response.data[i].service_state;
+        val = 0;        // set state to OK, current state is NOT ok, but only in soft state
+      }
+      else                                                // hard state
+        val = response.data[i].service_state;
+    }
 
     if($scope.graph_data[i].value != val) {
       $scope.total_health[$scope.graph_data[i].value]--;    // decrement old value
@@ -217,9 +232,17 @@ function graph_heat_map($scope)
   if(!$scope.svg_empty) {    // graph present
     d3.select(".map")
           .selectAll("rect")
-          .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
+          .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; });
+
+    d3.select(".map")
+          .selectAll(".cell")
           .transition(t)
           .style("fill", function(d) { return colors[d.value]; });
+
+    d3.select(".map")
+          .selectAll(".soft")
+          .transition(t)
+          .style("fill", function(d) { if(d.soft == 0) return colors[d.value]; return colors[d.soft]; });
 
     update_health_status($scope);
     return;
@@ -267,9 +290,11 @@ function graph_heat_map($scope)
       .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_group_base + d + "&limit=500"); });
 
   // ==========================================================
+  // matrix cells
 
   var heatMap = svg.append("g").attr("class", "map")
       .selectAll("rect")
+      .attr("class", " cell")
       .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
       .enter()
       .append("g");
@@ -286,23 +311,17 @@ function graph_heat_map($scope)
       .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); })
       .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
 
-      // TODO
+  // ==========================================================
+  // soft states
 
-      //heatMap.append("rect")
-      //.attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
-      //.attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
-      //.attr("class", " clickable" )
-      //.attr("width", cellSize / 4 + 2)
-      //.attr("height", cellSize / 4 + 2)
-      //.style("fill", function(d) { return colors[1]; });
-
-      //heatMap.append("text")
-      //.attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 15; })
-      //.attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 17; })
-      //.attr("text-anchor", "middle")
-      //.style("font-size", "14px")
-      //.style('fill', 'black')
-      //.text(function(d) { if(d.attempt != 3) return d.attempt; });
+      heatMap.append("rect")
+      .attr("class", " soft")
+      .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
+      .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
+      .attr("class", " clickable" )
+      .attr("width", cellSize / 4 + 2)
+      .attr("height", cellSize / 4 + 2)
+      .style("fill", function(d) { if(d.soft == 0) return colors[d.value]; return colors[d.soft]; });
 
   // ==========================================================
   // legend
