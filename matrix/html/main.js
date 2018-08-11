@@ -339,6 +339,25 @@ function graph_heat_map($scope)
     svg.select(".legendOrdinal")
       .call(legend);
 
+    legend = svg.select(".legendCells")
+      .append("g")
+      .attr("transform", "translate(0, 95)")
+      .attr("class", " special")
+
+      legend.append("rect")
+      .attr("width", 15)
+      .attr("height", 15)
+      .style("fill", function(d) { return colors[0]; })
+
+      legend.append("rect")
+      .attr("width", cellSize / 4 + 2)
+      .attr("height", cellSize / 4 + 2)
+      .style("fill", function(d) { return colors[2]; });
+
+      legend.append("text")
+      .attr("transform", "translate(25, 12.5)")
+      .text("hard status = OK, soft status = CRITICAL");
+
   // ==========================================================
   // health status
   $scope.svg = svg;
@@ -380,11 +399,11 @@ function update_health_status($scope)
 function add_health_status($scope)
 {
   $scope.svg.append("text")
-    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 170) + ")")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 190) + ")")
     .text("overall health status");
 
   var health_status = $scope.svg.append("g")
-    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 180) + ")")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 200) + ")")
     .attr("class", "health_status")
     .attr("width", 200)
     .attr("height", 200)
