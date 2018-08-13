@@ -231,18 +231,16 @@ function graph_heat_map($scope)
 
   if(!$scope.svg_empty) {    // graph present
     d3.select(".map")
-          .selectAll("rect")
-          .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; });
+          .selectAll(".cell")       // assign cells data
+          .data(data)
+          .transition(t)
+          .style("fill", function(d, i) { return colors[d.value]; });
 
     d3.select(".map")
-          .selectAll(".cell")
+          .selectAll(".soft")       // assign soft state data
+          .data(data.filter(function(d) { return d.soft != 0; }))
           .transition(t)
-          .style("fill", function(d) { return colors[d.value]; });
-
-    d3.select(".map")
-          .selectAll(".soft")
-          .transition(t)
-          .style("fill", function(d) { if(d.soft == 0) return colors[d.value]; return colors[d.soft]; });
+          .style("fill", function(d) { return colors[d.soft]; });
 
     update_health_status($scope);
     return;
@@ -292,17 +290,15 @@ function graph_heat_map($scope)
   // ==========================================================
   // matrix cells
 
-  var heatMap = svg.append("g").attr("class", "map")
-      .selectAll("rect")
-      .attr("class", " cell")
-      .data(data, function(d) { return d.row + ":" + d.col + ":" + d.value; })
-      .enter()
-      .append("g");
+  var map = svg.append("g").attr("class", "map");
 
-      heatMap.append("rect")
+      map.selectAll(".cell")
+      .data(data)
+      .enter()
+      .append("rect")
       .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
       .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
-      .attr("class", " clickable")
+      .attr("class", " clickable cell")
       .attr("width", cellSize - 1)
       .attr("height", cellSize - 1)
       .style("fill", function(d) { return colors[d.value]; })
@@ -314,14 +310,16 @@ function graph_heat_map($scope)
   // ==========================================================
   // soft states
 
-      heatMap.append("rect")
+      map.selectAll(".soft")
+      .data(data.filter(function(d) { return d.soft != 0; }))
+      .enter()
+      .append("rect")
       .attr("class", " soft")
       .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
       .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
-      .attr("class", " clickable" )
       .attr("width", cellSize / 4 + 2)
       .attr("height", cellSize / 4 + 2)
-      .style("fill", function(d) { if(d.soft == 0) return colors[d.value]; return colors[d.soft]; });
+      .style("fill", function(d) { return colors[d.soft]; });
 
   // ==========================================================
   // legend
