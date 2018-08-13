@@ -6,4 +6,6 @@ Repository with tools that are used to monitor & mantain Czech eduroam infrastru
 
 [radiator_munin](radiator_munin) plugin for munin to monitor number of RADIUS packet processed by Radiator
 
+[eduroamdb](eduroamdb) tool to collect and merge institution.xml
+
 [matrix](matrix) eduroam availability matrix
