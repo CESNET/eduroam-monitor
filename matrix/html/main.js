@@ -62,7 +62,7 @@ function create_graph_data($scope, response)
     if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
       val = 3;        // unknown
     else {
-      if(response.data[i].service_state_type == 0) {       // soft state
+      if(response.data[i].service_state_type == 0 && response.data[i].service_state != 99) {       // soft state and not PENDING
         soft = response.data[i].service_state;
         val = 0;        // set state to OK, current state is NOT ok, but only in soft state
       }
@@ -96,7 +96,7 @@ function update_graph_data($scope, response)
     if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
       val = 3;        // unknown
     else {
-      if(response.data[i].service_state_type == 0) {       // soft state
+      if(response.data[i].service_state_type == 0 && response.data[i].service_state != 99) {       // soft state and not PENDING
         soft = response.data[i].service_state;
         val = 0;        // set state to OK, current state is NOT ok, but only in soft state
       }
@@ -229,89 +229,130 @@ function graph_heat_map($scope)
 
   var svg = $scope.svg;
 
-  if(!$scope.svg_empty) {    // graph present
-    d3.select(".map")
-          .selectAll(".cell")       // assign cells data
-          .data(data)
-          .transition(t)
-          .style("fill", function(d, i) { return colors[d.value]; });
+  // ==========================================================
 
-    d3.select(".map")
-          .selectAll(".soft")       // assign soft state data
-          .data(data.filter(function(d) { return d.soft != 0; }))
-          .transition(t)
-          .style("fill", function(d) { return colors[d.soft]; });
+  // ran only once with initial page display
+  if($scope.svg_empty) {
+    svg = svg.attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    update_health_status($scope);
-    return;
+    // ==========================================================
+
+    var rowLabels = svg.append("g")
+        .attr("class", " clickable")
+        .selectAll(".rowLabelg")
+        .data(rowLabel)
+        .enter()
+        .append("text")
+        .text(function (d) { return d; })
+        .attr("x", 0)
+        .attr("y", function (d, i) { return hcrow.indexOf(i) * cellSize; })
+        .style("text-anchor", "end")
+        .attr("transform", "translate(-6," + cellSize + ")")
+        .on('mouseover', $scope.row_tip.show)
+        .on('mouseout', $scope.row_tip.hide)
+        .on("click", function(d, i) { window.open(host_base + d); })
+        .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(host_base + d); });
+
+    // ==========================================================
+
+    var colLabels = svg.append("g")
+        .attr("class", " clickable")
+        .selectAll(".colLabelg")
+        .data(colLabel)
+        .enter()
+        .append("text")
+        .text(function (d) { return d; })
+        .attr("x", 0)
+        .attr("y", function (d, i) { return hccol.indexOf(i) * cellSize; })
+        .style("text-anchor", "left")
+        .attr("transform", "translate(" + cellSize  + ",-6) rotate (-90)")
+        .on('mouseover', $scope.col_tip.show)
+        .on('mouseout', $scope.col_tip.hide)
+        .on("click", function(d, i) { window.open(service_group_base + d + "&limit=500"); })
+        .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_group_base + d + "&limit=500"); });
+
+    // ==========================================================
+    // matrix cells
+
+    var map = svg.append("g").attr("class", "map");
+
+        map.selectAll(".cell")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
+        .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
+        .attr("class", " clickable cell")
+        .attr("width", cellSize - 1)
+        .attr("height", cellSize - 1)
+        .style("fill", function(d) { return colors[d.value]; })
+        .on('mouseover', $scope.cell_tip.show)
+        .on('mouseout', $scope.cell_tip.hide)
+        .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); })
+        .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
+
+    // ==========================================================
+    // legend
+      var ordinal = d3.scaleOrdinal()
+        .domain(["status = OK", "status = WARNING", "status = CRITICAL", "status = UNKNOWN", "status = PENDING"])
+        .range([ colors[0], colors[1], colors[2], colors[3], colors[99] ]);
+
+      svg.append("g")
+        .attr("class", "legendOrdinal")
+        .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 50) + ")");
+
+      var legend = d3.legendColor()
+        .scale(ordinal);
+
+      svg.select(".legendOrdinal")
+        .call(legend);
+
+      legend = svg.select(".legendCells")
+        .append("g")
+        .attr("transform", "translate(0, 95)")
+        .attr("class", " special")
+
+        legend.append("rect")
+        .attr("width", 15)
+        .attr("height", 15)
+        .style("fill", function(d) { return colors[0]; })
+
+        legend.append("rect")
+        .attr("width", cellSize / 4 + 2)
+        .attr("height", cellSize / 4 + 2)
+        .style("fill", function(d) { return colors[2]; });
+
+        legend.append("text")
+        .attr("transform", "translate(25, 12.5)")
+        .text("hard status = OK, soft status = CRITICAL");
+
+    // ==========================================================
+    // health status
+    $scope.svg = svg;
+    add_health_status($scope);
+
+    // ==========================================================
+    $scope.loading = false;
+    $scope.svg_empty = false;
   }
 
-  svg = svg.attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // ==========================================================
+  // update map
+  d3.select(".map")
+        .selectAll(".cell")       // assign cells data
+        .data(data)
+        .transition(t)
+        .style("fill", function(d, i) { return colors[d.value]; });
 
   // ==========================================================
-
-  var rowLabels = svg.append("g")
-      .attr("class", " clickable")
-      .selectAll(".rowLabelg")
-      .data(rowLabel)
-      .enter()
-      .append("text")
-      .text(function (d) { return d; })
-      .attr("x", 0)
-      .attr("y", function (d, i) { return hcrow.indexOf(i) * cellSize; })
-      .style("text-anchor", "end")
-      .attr("transform", "translate(-6," + cellSize + ")")
-      .on('mouseover', $scope.row_tip.show)
-      .on('mouseout', $scope.row_tip.hide)
-      .on("click", function(d, i) { window.open(host_base + d); })
-      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(host_base + d); });
-
-  // ==========================================================
-
-  var colLabels = svg.append("g")
-      .attr("class", " clickable")
-      .selectAll(".colLabelg")
-      .data(colLabel)
-      .enter()
-      .append("text")
-      .text(function (d) { return d; })
-      .attr("x", 0)
-      .attr("y", function (d, i) { return hccol.indexOf(i) * cellSize; })
-      .style("text-anchor", "left")
-      .attr("transform", "translate(" + cellSize  + ",-6) rotate (-90)")
-      .on('mouseover', $scope.col_tip.show)
-      .on('mouseout', $scope.col_tip.hide)
-      .on("click", function(d, i) { window.open(service_group_base + d + "&limit=500"); })
-      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_group_base + d + "&limit=500"); });
-
-  // ==========================================================
-  // matrix cells
-
-  var map = svg.append("g").attr("class", "map");
-
-      map.selectAll(".cell")
-      .data(data)
-      .enter()
-      .append("rect")
-      .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
-      .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
-      .attr("class", " clickable cell")
-      .attr("width", cellSize - 1)
-      .attr("height", cellSize - 1)
-      .style("fill", function(d) { return colors[d.value]; })
-      .on('mouseover', $scope.cell_tip.show)
-      .on('mouseout', $scope.cell_tip.hide)
-      .on("click", function(d, i) { window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); })
-      .on("mousedown", function(d, i) { if(d3.event.button == 1) window.open(service_base + $scope.radius_servers[d.row] + "&service=%40" + $scope.realms[d.col]); });
-
-  // ==========================================================
-  // soft states
-
-      map.selectAll(".soft")
-      .data(data.filter(function(d) { return d.soft != 0; }))
+  // add soft states
+    d3.select(".map")
+      .selectAll(".soft")
+      //.data(data.filter(function(d) { return d.soft != 0; }))     // TODO - key func
+      .data(data.filter(function(d) { return d.soft != 0; }), function(d, i) { return d.row + ":" + d.col; })
       .enter()
       .append("rect")
       .attr("class", " soft")
@@ -321,49 +362,22 @@ function graph_heat_map($scope)
       .attr("height", cellSize / 4 + 2)
       .style("fill", function(d) { return colors[d.soft]; });
 
-  // ==========================================================
-  // legend
-    var ordinal = d3.scaleOrdinal()
-      .domain(["status = OK", "status = WARNING", "status = CRITICAL", "status = UNKNOWN", "status = PENDING"])
-      .range([ colors[0], colors[1], colors[2], colors[3], colors[99] ]);
+  // assign soft state data
+  //add_soft_states(d3.select(".map"), data, hcrow, hccol);
 
-    svg.append("g")
-      .attr("class", "legendOrdinal")
-      .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 50) + ")");
+  // update current soft states
+  d3.select(".map")
+      .selectAll(".soft")
+      .transition(t)
+      .style("fill", function(d) { return colors[d.soft]; });
 
-    var legend = d3.legendColor()
-      .scale(ordinal);
+  // delete non existing soft states
+  d3.select(".map")
+      .selectAll(".soft")
+      .exit()
+      .remove();
 
-    svg.select(".legendOrdinal")
-      .call(legend);
-
-    legend = svg.select(".legendCells")
-      .append("g")
-      .attr("transform", "translate(0, 95)")
-      .attr("class", " special")
-
-      legend.append("rect")
-      .attr("width", 15)
-      .attr("height", 15)
-      .style("fill", function(d) { return colors[0]; })
-
-      legend.append("rect")
-      .attr("width", cellSize / 4 + 2)
-      .attr("height", cellSize / 4 + 2)
-      .style("fill", function(d) { return colors[2]; });
-
-      legend.append("text")
-      .attr("transform", "translate(25, 12.5)")
-      .text("hard status = OK, soft status = CRITICAL");
-
-  // ==========================================================
-  // health status
-  $scope.svg = svg;
-  add_health_status($scope);
-
-  // ==========================================================
-  $scope.loading = false;
-  $scope.svg_empty = false;
+  update_health_status($scope);
 }
 /* --------------------------------------------------------------------------------- */
 // create health status data
