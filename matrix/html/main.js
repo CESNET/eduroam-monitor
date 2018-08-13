@@ -362,9 +362,6 @@ function graph_heat_map($scope)
       .attr("height", cellSize / 4 + 2)
       .style("fill", function(d) { return colors[d.soft]; });
 
-  // assign soft state data
-  //add_soft_states(d3.select(".map"), data, hcrow, hccol);
-
   // update current soft states
   d3.select(".map")
       .selectAll(".soft")
