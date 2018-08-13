@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<realm_usages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<realm_usage country="country0">
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+	</realm_usage>
+	<realm_usage country="country1">
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+	</realm_usage>
+	<realm_usage country="country2">
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+		<usage date="2006-05-04">
+			<national_sn>2147483647</national_sn>
+			<international_sn>2147483647</international_sn>
+		</usage>
+	</realm_usage>
+</realm_usages>

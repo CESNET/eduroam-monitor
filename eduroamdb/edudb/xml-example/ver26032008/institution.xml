@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<institutions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="institution2.xsd">
+	<institution>
+		<country>country0</country>
+		<type>
+			<SP/>
+		</type>
+		<org_name>org_name0</org_name>
+		<address_street>address_street0</address_street>
+		<address_city>address_city0</address_city>
+		<contact_name>contact_name0</contact_name>
+		<contact_email>contact_email0</contact_email>
+		<contact_phone>contact_phone0</contact_phone>
+		<info_URL>http://www.oxygenxml.com/</info_URL>
+		<policy_URL>http://www.oxygenxml.com/</policy_URL>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</institution>
+	<institution>
+		<country>country1</country>
+		<type>
+			<IdPSP inst_realm="inst_realm0"/>
+		</type>
+		<org_name>org_name1</org_name>
+		<address_street>address_street1</address_street>
+		<address_city>address_city1</address_city>
+		<contact_name>contact_name1</contact_name>
+		<contact_email>contact_email1</contact_email>
+		<contact_phone>contact_phone1</contact_phone>
+		<info_URL>http://www.oxygenxml.com/</info_URL>
+		<policy_URL>http://www.oxygenxml.com/</policy_URL>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</institution>
+	<institution>
+		<country>country2</country>
+		<type>
+			<IdP inst_realm="inst_realm3"/>
+		</type>
+		<org_name>org_name2</org_name>
+		<address_street>address_street2</address_street>
+		<address_city>address_city2</address_city>
+		<contact_name>contact_name2</contact_name>
+		<contact_email>contact_email2</contact_email>
+		<contact_phone>contact_phone2</contact_phone>
+		<info_URL>http://www.oxygenxml.com/</info_URL>
+		<policy_URL>http://www.oxygenxml.com/</policy_URL>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</institution>
+</institutions>

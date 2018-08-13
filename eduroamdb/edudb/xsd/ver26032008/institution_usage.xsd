@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="institution_usages">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element name="institution_usage">
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element name="usage">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="local_sn" type="xs:int"/>
+										<xs:element name="national_sn" type="xs:int"/>
+										<xs:element name="international_sn" type="xs:int"/>
+									</xs:sequence>
+									<xs:attribute name="date" type="xs:date" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="inst_realm" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,40 @@
+<<<<<<< ChangeLog
+2008-10-10 Pavel Polacek <pavel.polacek@ujep.cz>
+			* Version: 0.54
+			* Complete implementation of convert_institution.pl including output
+			modules to dokuwiki, gpx and google kml
+
+2008-09-14 Pavel Polacek <pavel.polacek@ujep.cz>
+			* Version: 0.53
+			* Added convert_institution.pl
+
+=======
+2008-10-18 Pavel Polacek <pavel.polacek@ujep.cz>
+			* Version: 0.55
+			* Automatic tests are in directory tests
+
+2008-10-10 Pavel Polacek <pavel.polacek@ujep.cz>
+			* Version: 0.54
+			* Complete implementation of convert_institution.pl including output
+			modules to dokuwiki, gpx and google kml
+
+2008-09-14 Pavel Polacek <pavel.polacek@ujep.cz>
+			* Version: 0.53
+			* Added convert_institution.pl
+
+>>>>>>> 1.5
+2008-07-08  Jan Tomasek  <jan@tomasek.cz>
+	    * Version: 0.52
+	    * Fixed code optimalizing cache usage.
+
+2008-07-07  Pavel Polacek <pavel.polacek@ujep.cz>
+	    * Version: 0.52
+	    * Optimalized cache usage.
+	
+2008-06-24  Jan Tomasek  <jan@tomasek.cz>
+	    * Version: 0.51
+	    * Fixed to problem with swapped langitude and longitude.
+
+2008-06-18  Jan Tomasek  <jan@tomasek.cz>
+	    * Version: 0.50
+	    * First published version, it contains only get_institution.pl

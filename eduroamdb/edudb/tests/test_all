@@ -1,0 +1,17 @@
+#!/bin/bash
+# run all tests
+export CONVERT_BINARY="./convert_institution.pl"
+export CONVERT_PATH="../bin/"
+
+# gpx tests
+test_gpx/test_gpx
+
+# kml tests
+test_kml/test_kml_schema
+
+# charset test
+test_conf_iso8859-2/test_iso8859
+test_conf_iso8859-2/test_utf8
+
+
+

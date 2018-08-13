@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<realms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="realm.xsd">
+	<realm>
+		<country>country0</country>
+		<stype>0</stype>
+		<org_name>org_name0</org_name>
+		<address_street>address_street0</address_street>
+		<address_city>address_city0</address_city>
+		<contact_name>contact_name0</contact_name>
+		<contact_email>contact_email0</contact_email>
+		<contact_phone>contact_phone0</contact_phone>
+		<info_URL>http://www.oxygenxml.com/</info_URL>
+		<policy_URL>http://www.oxygenxml.com/</policy_URL>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</realm>
+</realms>

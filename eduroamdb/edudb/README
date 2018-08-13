@@ -1,0 +1,25 @@
+# $Id: README,v 1.1 2008-06-18 14:06:36 semik Exp $
+
+get_institution.pl
+~~~~~~~~~~~~~~~~~~
+Skript collects data (institution.xml) from eduroam participants and
+generates whole NRO institution.xml file.
+
+Usage:
+  ./bin/get_institution.pl --CFG cfg/get_institution.cfg
+
+The script will try to download all URLs defined in configuration
+file. It will verify them by XSD and check whatever they contains only
+listed realms. If everything is ok then final institution.xml file is
+published.
+
+
+institution.xml => google kml
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+An ugly but fast trick for converting final institution.xml into kml
+file for google maps:
+
+bin/GPS2google.pl institution.xml |\
+	sed 's/encoding="UTF-8"/encoding="ISO-8859-2"/' |\
+	sed "s/GLOB.*//" |\
+	xsltproc bin/GPS2google.xsl -  > institution.kml

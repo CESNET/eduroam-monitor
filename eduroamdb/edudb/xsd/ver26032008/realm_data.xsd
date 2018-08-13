@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="realm_data_root">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element name="realm_data">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="country" type="xs:string"/>
+							<xs:element name="number_IdP" type="xs:int"/>
+							<xs:element name="number_SP" type="xs:int"/>
+							<xs:element name="number_SPIdP" type="xs:int"/>
+							<xs:element name="number_inst" type="xs:int" minOccurs="0"/>
+							<xs:element name="number_user" type="xs:int" minOccurs="0"/>
+							<xs:element name="number_id" type="xs:int" minOccurs="0"/>
+							<xs:element name="ts" type="xs:dateTime"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

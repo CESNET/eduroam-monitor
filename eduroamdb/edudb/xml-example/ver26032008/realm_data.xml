@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<realm_data_root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="realm_data.xsd">
+	<realm_data>
+		<country>country0</country>
+		<number_IdP>2147483647</number_IdP>
+		<number_SP>2147483647</number_SP>
+		<number_SPIdP>2147483647</number_SPIdP>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</realm_data>
+	<realm_data>
+		<country>country1</country>
+		<number_IdP>2147483647</number_IdP>
+		<number_SP>2147483647</number_SP>
+		<number_SPIdP>2147483647</number_SPIdP>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</realm_data>
+	<realm_data>
+		<country>country2</country>
+		<number_IdP>2147483647</number_IdP>
+		<number_SP>2147483647</number_SP>
+		<number_SPIdP>2147483647</number_SPIdP>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</realm_data>
+</realm_data_root>

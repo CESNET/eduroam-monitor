@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="realm_usages">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element name="realm_usage">
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element name="usage">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="national_sn" type="xs:int"/>
+										<xs:element name="international_sn" type="xs:int"/>
+									</xs:sequence>
+									<xs:attribute name="date" use="required" type="xs:date"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="country" use="required" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

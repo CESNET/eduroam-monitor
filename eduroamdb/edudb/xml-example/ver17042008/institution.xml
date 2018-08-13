@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<institutions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="institution.xsd">
+	<institution>
+		<country>country0</country>
+		<type>1</type>
+		<inst_realm>inst_realm0</inst_realm>
+		<org_name lang="en">org_name0</org_name>
+		<address>
+			<street>street0</street>
+			<city>city0</city>
+		</address>
+		<contact>
+			<name>name0</name>
+			<email>email0</email>
+			<phone>phone0</phone>
+		</contact>
+		<contact>
+			<name>name1</name>
+			<email>email1</email>
+			<phone>phone1</phone>
+		</contact>
+		<contact>
+			<name>name2</name>
+			<email>email2</email>
+			<phone>phone2</phone>
+		</contact>
+		<info_URL lang="en">http://www.eduroam.org/</info_URL>
+		<info_URL lang="hr">http://www.eduroam.hr/</info_URL>
+		<policy_URL lang="en">http://www.eduroam.org/</policy_URL>
+		<policy_URL lang="es">http://www.eduroam.es/</policy_URL>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+	</institution>
+	<institution>
+		<country>country1</country>
+		<type>1</type>
+		<inst_realm>inst_realm1</inst_realm>
+		<org_name lang="en">org_name1</org_name>
+		<address>
+			<street>street2</street>
+			<city>city2</city>
+		</address>
+		<contact>
+			<name>name4</name>
+			<email>email4</email>
+			<phone>phone4</phone>
+		</contact>
+		<contact>
+			<name>name5</name>
+			<email>email5</email>
+			<phone>phone5</phone>
+		</contact>
+		<contact>
+			<name>name6</name>
+			<email>email6</email>
+			<phone>phone6</phone>
+		</contact>
+		<info_URL lang="en">http://www.eduroam.org/</info_URL>
+		<policy_URL lang="en">http://www.eduroam.org/</policy_URL>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+		<location>			
+			<longitude>longitude1</longitude>
+			<latitude>latitude1</latitude>
+			<loc_name lang="en">loc_name</loc_name>
+			<loc_name lang="de">loc_name_de</loc_name>
+			<address>
+				<street>street3</street>
+				<city>city3</city>
+			</address>
+			<SSID>eduroam</SSID>
+			<enc_level>enc_level1</enc_level>
+			<port_restrict>false</port_restrict>
+			<transp_proxy>false</transp_proxy>
+			<IPv6>false</IPv6>
+			<NAT>false</NAT>
+			<AP_no>2147483647</AP_no>
+			<wired>false</wired>
+			<info_URL lang="en">http://www.eduroam.org/</info_URL>
+		</location>
+	</institution>
+	<institution>
+		<country>country2</country>
+		<type>1</type>
+		<inst_realm>inst_realm2</inst_realm>
+		<inst_realm>inst_realm2a</inst_realm>
+		<inst_realm>inst_realm2b</inst_realm>
+		<org_name lang="en">org_name2</org_name>
+		<address>
+			<street>street4</street>
+			<city>city4</city>
+		</address>
+		<contact>
+			<name>name8</name>
+			<email>email8</email>
+			<phone>phone8</phone>
+		</contact>
+		<contact>
+			<name>name9</name>
+			<email>email9</email>
+			<phone>phone9</phone>
+		</contact>
+		<contact>
+			<name>name10</name>
+			<email>email10</email>
+			<phone>phone10</phone>
+		</contact>
+		<info_URL lang="en">http://www.eduroam.org/</info_URL>
+		<policy_URL lang="en">http://www.eduroam.org/</policy_URL>
+		<ts>2006-05-04T18:13:51.0Z</ts>
+		<location>
+			<longitude>longitude2</longitude>
+			<latitude>latitude2</latitude>
+			<address>
+				<street>street5</street>
+				<city>city5</city>
+			</address>
+			<contact>
+				<name>name11</name>
+				<email>email11</email>
+				<phone>phone11</phone>
+			</contact>
+			<SSID>eduroam</SSID>
+			<enc_level>enc_level2</enc_level>
+			<port_restrict>false</port_restrict>
+			<transp_proxy>false</transp_proxy>
+			<IPv6>false</IPv6>
+			<NAT>false</NAT>
+			<AP_no>2147483647</AP_no>
+			<wired>false</wired>
+			<info_URL lang="en">http://www.eduroam.org/</info_URL>
+		</location>
+	</institution>
+</institutions>

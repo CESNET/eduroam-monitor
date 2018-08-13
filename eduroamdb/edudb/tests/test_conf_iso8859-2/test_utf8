@@ -1,0 +1,32 @@
+#!/bin/bash
+# test gpx output of convert_institution.pl
+
+CONF="get_institution_utf8.cfg"
+OUTFILE="/tmp/_test.utf8"
+OUT_MODULE="gpx"
+MY_PWD=`pwd`
+XMLLINT_BIN=`which xmllint`
+GPX_XSD='../xsd/gpx.xsd'  # !!! path is relative to tests directory
+
+# convert phase
+cd $CONVERT_PATH
+$CONVERT_BINARY -CFG $MY_PWD/$CONF -OUTFILE $OUTFILE -OUT_MODULE $OUT_MODULE > /dev/null
+
+# first test
+# is output valid ?
+RES=`$XMLLINT_BIN --schema $GPX_XSD --noout $OUTFILE 2>&1`
+EXPECTED_RES="$OUTFILE validates"
+
+#echo $RES
+#echo $EXPECTED_RES
+
+echo -n "Test utf-8 charset in config "
+if [ "$RES" == "$EXPECTED_RES" ]; then
+	echo ok;
+  exit 0;
+else
+	echo failed;
+  exit 1;
+fi
+
+
