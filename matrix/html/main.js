@@ -92,6 +92,8 @@ function update_graph_data($scope, response)
   var soft;
 
   for(var i in response.data) {
+    soft = 0;
+
     // if the last check was more than 4 hours ago, set it to unknown
     if(Number.isInteger(response.data[i].service_last_check) && response.data[i].service_last_check < (Math.floor(new Date().getTime() / 1000) - 14400))
       val = 3;        // unknown
@@ -106,7 +108,8 @@ function update_graph_data($scope, response)
 
     if($scope.graph_data[i].value != val) {
       $scope.total_health[$scope.graph_data[i].value]--;    // decrement old value
-      $scope.graph_data[i].value = val;         // assign new value
+      $scope.graph_data[i].value = val;                     // assign new value
+      $scope.graph_data[i].soft = soft;                     // assign soft state
       $scope.total_health[val]++;                           // increment new value
     }
   }
@@ -348,30 +351,26 @@ function graph_heat_map($scope)
         .style("fill", function(d, i) { return colors[d.value]; });
 
   // ==========================================================
-  // add soft states
-    d3.select(".map")
+  var soft = d3.select(".map")
       .selectAll(".soft")
-      //.data(data.filter(function(d) { return d.soft != 0; }))     // TODO - key func
       .data(data.filter(function(d) { return d.soft != 0; }), function(d, i) { return d.row + ":" + d.col; })
-      .enter()
+
+  // add soft states
+  soft.enter()
       .append("rect")
       .attr("class", " soft")
-      .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })     // compensate for labels
-      .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })     // compensate for labels
+      .attr("x", function(d) { return (hccol.indexOf(d.col)) * cellSize + 6; })
+      .attr("y", function(d) { return (hcrow.indexOf(d.row)) * cellSize + 4; })
       .attr("width", cellSize / 4 + 2)
       .attr("height", cellSize / 4 + 2)
       .style("fill", function(d) { return colors[d.soft]; });
 
   // update current soft states
-  d3.select(".map")
-      .selectAll(".soft")
-      .transition(t)
+  soft.transition(t)
       .style("fill", function(d) { return colors[d.soft]; });
 
   // delete non existing soft states
-  d3.select(".map")
-      .selectAll(".soft")
-      .exit()
+  soft.exit()
       .remove();
 
   update_health_status($scope);
