@@ -21,7 +21,8 @@ function get_data($scope, $http, $timeout)
 {
   $http({
     method  : 'GET',
-    url     : '/matrix/data.json'
+    url     : '/matrix/data.json',
+    cache: false
   })
   .then(function(response) {
     prepare_data($scope, response);
