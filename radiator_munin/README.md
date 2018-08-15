@@ -18,7 +18,7 @@ root@radius:/etc/munin/plugins# ln -s /usr/local/bin/radiator radiator_high
 root@radius:/etc/munin/plugins# ln -s /usr/local/bin/radiator radiator_medium
 root@radius:/etc/munin/plugins# ln -s /usr/local/bin/radiator radiator_low
 ```
-Radiator stats are divided into three groups: high, medium and low based on the volume of packets on EAP proxy RADIUS server. There is usualy 10 times more Access-Request packets than Access-Accept.
+Radiator stats are divided into three groups: high, medium and low. They are based on the volume of packets on EAP proxy RADIUS server. There is usualy 10 times more Access-Request packets than Access-Accept.
 
 And finaly you need setup your RO SNMP Comunity:
 ```text
