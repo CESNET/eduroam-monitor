@@ -371,6 +371,8 @@ function graph_heat_map($scope)
 
   // delete non existing soft states
   soft.exit()
+      .transition(t)
+      .style("fill-opacity", 0)
       .remove();
 
   update_health_status($scope);
