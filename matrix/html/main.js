@@ -100,8 +100,8 @@ function update_graph_data($scope, response)
       val = 3;        // unknown
     else {
       if(response.data[i].service_state_type == 0 && response.data[i].service_state != 99) {       // soft state and not PENDING
-        soft = response.data[i].service_state;
-        val = 0;        // set state to OK, current state is NOT ok, but only in soft state
+        soft = response.data[i].service_state;      // another set soft state
+        val = $scope.graph_data[i].value;           // set state to previous state
       }
       else                                                // hard state
         val = response.data[i].service_state;
@@ -110,9 +110,10 @@ function update_graph_data($scope, response)
     if($scope.graph_data[i].value != val) {
       $scope.total_health[$scope.graph_data[i].value]--;    // decrement old value
       $scope.graph_data[i].value = val;                     // assign new value
-      $scope.graph_data[i].soft = soft;                     // assign soft state
       $scope.total_health[val]++;                           // increment new value
     }
+
+    $scope.graph_data[i].soft = soft;                     // assign soft state, even if the previous state is same as the current
   }
 }
 /* --------------------------------------------------------------------------------- */
