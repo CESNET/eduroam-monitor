@@ -315,9 +315,11 @@ function graph_heat_map($scope)
       svg.select(".legendOrdinal")
         .call(legend);
 
+      var line_height = svg.select(".legendOrdinal").node().getBBox().height;
+
       legend = svg.select(".legendCells")
         .append("g")
-        .attr("transform", "translate(0, 95)")
+        .attr("transform", "translate(0, " + (line_height + line_height / 35) + ")")
         .attr("class", " special")
 
         legend.append("rect")
