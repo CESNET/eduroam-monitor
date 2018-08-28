@@ -1,11 +1,17 @@
 body{padding:0;margin:0;height:100%}
 html{padding:0;margin:0;min-height:100%}
 *,body,html{box-sizing:border-box}
-img{max-width:100%;height:auto;vertical-align:middle;border:0}
+img {
+    max-width:100%;
+    height:auto;
+    vertical-align:middle;
+    border:0
+}
 *{border-collapse:collapse}
 html{font-size:100%}
 body{
-  font-family:"Segoe UI","Open Sans",sans-serif,serif;
+    font-family:"Segoe UI","Open Sans",sans-serif,serif;
+    text-align: justify;
 }
 #container {
     min-height:100%;
@@ -152,11 +158,25 @@ li.level1 {
 }
 .main {
   border-top: 12px solid #00658d;
-  min-height: 100%;
-  padding-left: 10px;
+  /* min-height: 100%; */
+  /* padding-left: 10px; */
+}
+.main_text {
+    max-width: 50em;
+    margin: auto;
 }
 #cesnet_linker_placeholder {
   min-height: 45px;
   background-color: #4B4D4A;
+}
+
+.left {
+    margin-right: 1rem;
+    float: left;
+}
+
+.right {
+    margin-left: 1rem;
+    float: right;
 }
 
