@@ -25,12 +25,19 @@ function get_data($scope, $http, $timeout)
     cache: false
   })
   .then(function(response) {
-    prepare_data($scope, response);
-    graph_heat_map($scope);
+    if(!response.data)      // data are probably being generated right now, wait 1 second and try again
+      $timeout(function() {
+        get_data($scope, $http, $timeout);
+      }, 1000);
 
-    $timeout(function() {
-      get_data($scope, $http, $timeout);
-    }, 60000);
+    else {
+      prepare_data($scope, response);
+      graph_heat_map($scope);
+
+      $timeout(function() {
+        get_data($scope, $http, $timeout);
+      }, 60000);
+    }
   });
 }
 /* --------------------------------------------------------------------------------- */
