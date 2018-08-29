@@ -208,9 +208,9 @@ function graph_heat_map($scope)
   var height = cellSize * row_number;
 
   // ==========================================================
-  var service_group_base = "https://ermon2.cesnet.cz/monitoring/list/servicegroups#!/monitoring/list/services?servicegroup_name=";
-  var host_base = "https://ermon2.cesnet.cz/monitoring/list/hosts#!/monitoring/host/show?host="
-  var service_base = "https://ermon2.cesnet.cz/#!/monitoring/service/show?host="
+  var service_group_base = "https://ermon.cesnet.cz/monitoring/list/servicegroups#!/monitoring/list/services?servicegroup_name=";
+  var host_base = "https://ermon.cesnet.cz/monitoring/list/hosts#!/monitoring/host/show?host="
+  var service_base = "https://ermon.cesnet.cz/#!/monitoring/service/show?host="
   // ==========================================================
 
   var rowLabel = $scope.radius_servers;
