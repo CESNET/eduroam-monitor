@@ -31,6 +31,7 @@ function get_data($scope, $http, $timeout)
       }, 1000);
 
     else {
+      $scope.last_update = new Date();      // data was last updated now
       prepare_data($scope, response);
       graph_heat_map($scope);
 
@@ -206,7 +207,7 @@ function graph_heat_map($scope)
 {
   // ==========================================================
   // right margin for timestamp
-  var margin = { top: 220, right: 250, bottom: 240, left: 280 };
+  var margin = { top: 220, right: 250, bottom: 270, left: 280 };
 
   var col_number = $scope.realms.length;
   var row_number = $scope.radius_servers.length;
@@ -347,6 +348,7 @@ function graph_heat_map($scope)
     // health status
     $scope.svg = svg;
     add_health_status($scope);
+    add_timestamp($scope);
 
     // ==========================================================
     $scope.loading = false;
@@ -387,6 +389,7 @@ function graph_heat_map($scope)
       .remove();
 
   update_health_status($scope);
+  update_timestamp($scope);
 }
 /* --------------------------------------------------------------------------------- */
 // create health status data
@@ -445,5 +448,23 @@ function add_health_status($scope)
     .attr("x", function(d, i) { return i * 3 * cellSize + cellSize / 2; })
     .attr("y", function(d, i) { return 2 * cellSize; })
     .text(function (d) { return d.val; })
+}
+/* --------------------------------------------------------------------------------- */
+// add timestamp info
+/* --------------------------------------------------------------------------------- */
+function add_timestamp($scope)
+{
+  $scope.svg.append("text")
+    .attr("class", "update_timestamp")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 260) + ")")
+    .text("last updated at: " + $scope.last_update);
+}
+/* --------------------------------------------------------------------------------- */
+// update timestamp info
+/* --------------------------------------------------------------------------------- */
+function update_timestamp($scope)
+{
+  $scope.svg.selectAll('.update_timestamp')
+    .text("last updated at: " + $scope.last_update);
 }
 /* --------------------------------------------------------------------------------- */
