@@ -31,7 +31,7 @@ function get_data($scope, $http, $timeout)
       }, 1000);
 
     else {
-      $scope.last_update = new Date();      // data was last updated now
+      $scope.last_update = new Date().toLocaleString();      // data was last updated now
       prepare_data($scope, response);
       graph_heat_map($scope);
 
