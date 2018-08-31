@@ -9,9 +9,20 @@ var cellSize = 18;
 var colors = [ "#44bb77", "#ffaa44", "#ff5566", "#aa44ff" ];
 colors[99] = "#77aaff";
 /* --------------------------------------------------------------------------------- */
-angular.module('matrix').controller('matrix_controller', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+angular.module('matrix').controller('matrix_controller', ['$scope', '$http', '$timeout', '$window', function ($scope, $http, $timeout, $window) {
   $scope.loading = true;
   init_tips($scope)
+  $scope.window_focus = true;
+
+  $window.onblur = function() {
+    $scope.window_focus = false;
+  };
+
+  $window.onfocus = function() {
+    $scope.window_focus = true;
+    get_data($scope, $http, $timeout);
+  };
+
   get_data($scope, $http, $timeout);
 }]);
 /* --------------------------------------------------------------------------------- */
@@ -31,13 +42,15 @@ function get_data($scope, $http, $timeout)
       }, 1000);
 
     else {
-      $scope.last_update = new Date().toLocaleString();      // data was last updated now
-      prepare_data($scope, response);
-      graph_heat_map($scope);
+      if($scope.window_focus) {
+        $scope.last_update = new Date().toLocaleString();      // data was last updated now
+        prepare_data($scope, response);
+        graph_heat_map($scope);
 
-      $timeout(function() {
-        get_data($scope, $http, $timeout);
-      }, 60000);
+        $timeout(function() {
+          get_data($scope, $http, $timeout);
+        }, 60000);
+      }
     }
   });
 }
