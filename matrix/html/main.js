@@ -230,7 +230,7 @@ function graph_heat_map($scope)
 
   // ==========================================================
   var service_group_base = "https://ermon.cesnet.cz/monitoring/list/servicegroups#!/monitoring/list/services?servicegroup_name=";
-  var host_base = "https://ermon.cesnet.cz/monitoring/list/hosts#!/monitoring/host/show?host="
+  var host_base = "https://ermon.cesnet.cz/monitoring/list/hosts#!/monitoring/host/services?host="
   var service_base = "https://ermon.cesnet.cz/#!/monitoring/service/show?host="
   // ==========================================================
 
