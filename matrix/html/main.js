@@ -13,14 +13,21 @@ angular.module('matrix').controller('matrix_controller', ['$scope', '$http', '$t
   $scope.loading = true;
   init_tips($scope)
   $scope.window_focus = true;
-
   $window.onblur = function() {
     $scope.window_focus = false;
+    if($scope.timeout)
+      $timeout.cancel($scope.timeout)
   };
 
   $window.onfocus = function() {
     $scope.window_focus = true;
-    get_data($scope, $http, $timeout);
+    var diff = new Date() - $scope.last_update_date;
+    if(diff >= 60000)     // last data are 60 or more seconds old, update
+      get_data($scope, $http, $timeout);
+    else       // data are newer
+      $scope.timeout = $timeout(function() {
+        get_data($scope, $http, $timeout);
+      }, 60000 - diff);       // refresh data when 60 seconds old
   };
 
   get_data($scope, $http, $timeout);
@@ -43,11 +50,12 @@ function get_data($scope, $http, $timeout)
 
     else {
       if($scope.window_focus) {
+        $scope.last_update_date = new Date();                  // keep date to compare
         $scope.last_update = new Date().toLocaleString();      // data was last updated now
         prepare_data($scope, response);
         graph_heat_map($scope);
 
-        $timeout(function() {
+        $scope.timeout = $timeout(function() {
           get_data($scope, $http, $timeout);
         }, 60000);
       }
