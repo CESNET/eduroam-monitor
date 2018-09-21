@@ -257,7 +257,7 @@ sub out_kml {
 
   # icon of placemark
   my $icon_href = $doc->createElement('href');
-  $icon_href->appendTextNode('https://ermon.cesnet.cz/map_icon8.png');
+  $icon_href->appendTextNode('https://monitor.eduroam.cz/images/map_icon8.png');
   my $icon = $doc->createElement('Icon');
   $icon->appendChild($icon_href);
   my $scale = $doc->createElement('scale');
