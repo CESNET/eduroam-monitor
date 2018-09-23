@@ -591,6 +591,7 @@ sub loadLogFile {
     } elsif ($line =~ /radiator\[\d+\]: .*is not defined in your dictionary/) {
     } elsif ($line =~ /radiator\[\d+\]: Using Net::SSLeay.*/) {
     } elsif ($line =~ /radiator\[\d+\]: sendTo: send to \S+ failed: Invalid argument/) {
+    } elsif ($line =~ /radiator\[\d+\]: Malformed Vendor Specific Attribute/) {
     } else {
       warn "Unmatched line: $line\n";
     };
