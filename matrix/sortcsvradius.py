@@ -9,7 +9,7 @@ def decorate_domain(d):
 
 
 def keyfunc(row):
-    """ Return key for for hostname and service description
+    """ Return key for hostname and service description
         for:
         ["proxy.exmaple.com", "@example.org"]
         return:
