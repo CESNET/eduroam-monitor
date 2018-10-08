@@ -228,7 +228,7 @@ function graph_heat_map($scope)
 {
   // ==========================================================
   // right margin for timestamp
-  var margin = { top: 220, right: 250, bottom: 270, left: 280 };
+  var margin = { top: 220, right: 250, bottom: 270, left: 320 };
 
   var col_number = $scope.realms.length;
   var row_number = $scope.radius_servers.length;
