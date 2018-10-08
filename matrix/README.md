@@ -29,4 +29,10 @@ The web page itself is a statical html page, so everything is done in javascript
 The graph is created by [main.js](https://github.com/CESNET/eduroam-monitor/blob/master/matrix/html/main.js).
 The data are refreshed every 60 seconds.
 
+## Deployment video
+
+This is how availability matrix looked like when the new monitoring system of czech eduroam was put into the operation.
+
+[![video](https://img.youtube.com/vi/R-8_SS2_XYY/0.jpg)](https://www.youtube.com/watch?v=R-8_SS2_XYY)
+
 
