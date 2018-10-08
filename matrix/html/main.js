@@ -444,11 +444,11 @@ function update_health_status($scope)
 function add_health_status($scope)
 {
   $scope.svg.append("text")
-    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 190) + ")")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 195) + ")")
     .text("overall health status");
 
   var health_status = $scope.svg.append("g")
-    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 200) + ")")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 205) + ")")
     .attr("class", "health_status")
     .attr("width", 200)
     .attr("height", 200)
@@ -477,7 +477,7 @@ function add_timestamp($scope)
 {
   $scope.svg.append("text")
     .attr("class", "update_timestamp")
-    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 260) + ")")
+    .attr("transform", "translate(-250, " + ($scope.radius_servers.length * cellSize + 265) + ")")
     .text("last updated at: " + $scope.last_update);
 }
 /* --------------------------------------------------------------------------------- */
