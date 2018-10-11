@@ -33,6 +33,8 @@ The data are refreshed every 60 seconds.
 
 This is how availability matrix looked like when the new monitoring system of czech eduroam was put into the operation.
 
+### Czech version
 [![Czech version](https://img.youtube.com/vi/R-8_SS2_XYY/0.jpg)](https://www.youtube.com/watch?v=R-8_SS2_XYY)
 
+### English version
 [![English version](https://img.youtube.com/vi/7Ll8rHvmR8s/0.jpg)](https://www.youtube.com/watch?v=7Ll8rHvmR8s)
