@@ -218,7 +218,7 @@ sub get_institution_xml {
       next;  # all institution without url is only container of organization units
     }
 
-    my @args = ('-q', '--no-check-certificate', '-O -');
+    my @args = ('-4', '-q', '--no-check-certificate', '-O -');
 
     if( $$r_lm{$realm} ) {
       # is filled only if cache file exist
