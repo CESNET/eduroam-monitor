@@ -225,7 +225,7 @@ sub get_institution_xml {
       push(@args, '--header=\'If-Modified-Since: '.time2str($$r_lm{$realm}).'\'');
     }
 
-    my $cmd = join(' ', 'wget', @args, $$r_arr{INST_XML});
+    my $cmd = join(' ', 'wget', @args, "'".$$r_arr{INST_XML}."'");
     my $res = 0;
     my $content = '';
     if (open(WGET, $cmd.' |')) {
