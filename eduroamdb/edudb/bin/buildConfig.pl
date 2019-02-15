@@ -41,7 +41,11 @@ sub get_institution_xml {
   my $entry = shift;
 
   foreach my $labeled_uri (@{$entry->getValues('labeledURI')}) {
-    return $1 if ($labeled_uri =~ /^(.+)\s+institution\.xml$/);
+    if ($labeled_uri =~ /^(.+)\s+institution\.xml$/) {
+      my $url = $1;
+      $url =~ s/~/\%7E/g;
+      return $url;
+    };
   };
 
   return;
