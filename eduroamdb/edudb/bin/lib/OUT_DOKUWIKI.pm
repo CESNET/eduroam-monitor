@@ -59,6 +59,9 @@ sub get_info_url {
 	# if not info_url in certain language available => use other available
 	$info_url = $info_url_other_lang if ! $first_match;
 
+    $info_url =~ s/^\s+//g;
+    $info_url =~ s/\s+$//g;
+
 	return $info_url;
 
 }
