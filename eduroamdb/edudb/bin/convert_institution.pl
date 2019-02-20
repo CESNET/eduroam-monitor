@@ -64,7 +64,7 @@ my $config = AppConfig->new
     CREATE     => '.*',
    },
    CFG                 => {DEFAULT => '../../get_institution.cfg'},
-	 EXT_CACHE           => {DEFAULT => '.cache' },  # always use data from cache
+	 EXT_CACHE           => {DEFAULT => '.json' },  # always use data from cache
    CACHE_DIR           => {DEFAULT => '../cache' },
    #WXS_INSTITUTION     => {DEFAULT => '../xsd/ver17042008/institution.xsd' },
    #XML_INSTITUTION     => {DEFAULT => '../../institution.xml'},
@@ -254,17 +254,15 @@ $config->file($config->CFG) or
   log_die( "Can't open config file \"".$config->CFG."\": $!");
 log_begin( PROGRAM, $config->LOG_OPTS, LOG_LOCAL0, $config->LOG_LEVEL, $config->LOG_SYSLOG, $config->LOG_STDOUT);
 
-#print Dumper( %realms );
 switch_locale( $config->LANG, $config->XML_ENCODING );
 
 # read realms config
 my %realms = get_realms_from_file( $config, $config->CONF_ENCODING ); # , $config->realms_cfg );
 
-
 # create tree of institutions
 my $tree =  create_tree_inst( \%realms, $config->ROOT );
 
-debug_draw_tree( $tree );
+#debug_draw_tree( $tree );
 
 if( $config->OUT_MODULE eq OPTION_OUT_DOKUWIKI ) {
   out_dokuwiki( \%realms, $tree, $config->OUTFILE, $config->CACHE_DIR, $config->EXT_CACHE, $config->LANG, $config->OUT_DESC, $config->PRINT_EMPTY_LOCNAME );

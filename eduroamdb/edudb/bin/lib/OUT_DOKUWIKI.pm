@@ -27,43 +27,37 @@ use constant COUNTER_SON => 'sssson';  # index to hash
 
 # get info url
 sub get_info_url {
-  my $r_xml = shift;
-	my $index = shift;
-	my $lang = shift;
-	
-  my $info_url = "";
-	my $info_url_other_lang = "";
-	my $first_match = 0;
-	if (defined $r_xml->{$index}) {
-    my $xml = $r_xml->{ $index };
-		my @urls = $xml->getElementsByTagName( lib::CONF_SHARED::INFO_URL );
-		foreach my $t_url (@urls) {
-      #print Dumper( $t_url );
-			if( $t_url->getAttribute( 'lang' ) eq $lang ) {
-				if (defined $t_url->getFirstChild ) {
-  				$info_url = $t_url->getFirstChild->getData if defined $t_url->getFirstChild;
-					#print Dumper $info_url;
-		  		$first_match = 1;
-  				# first match is ok
-  				last;
-				}
-			} else {
-				$info_url_other_lang = $t_url->getFirstChild->getData if defined $t_url->getFirstChild;
-				#log_it( LOG_WARNING, "info_url is not defined !" );
-				#return "";
+    my $r_xml = shift;
+    my $index = shift;
+    my $lang = shift;
 
-			}
-		}
+    my $info_url = "";
+    my $info_url_other_lang = "";
+    my $first_match = 0;
+    if (defined $r_xml->{$index}) {
+	my $xml = $r_xml->{ $index };
+
+	#my @urls = $xml->getElementsByTagName( lib::CONF_SHARED::INFO_URL );
+	foreach my $t_url (@{$xml->{'info_URL'}}) {
+	    #print Dumper( $t_url );
+	    my $t_url_lang = $t_url->{'lang'};
+	    if ($t_url_lang eq $lang) {
+		$info_url = $t_url->{'data'};
+		$first_match = 1;
+		# first match is ok
+		last;
+	    } else {
+		$info_url_other_lang = $t_url->{'data'};
+		#log_it( LOG_WARNING, "info_url is not defined !" );
+		#return "";
+	    }
 	}
+    }
 
-	# if not info_url in certain language available => use other available
-	$info_url = $info_url_other_lang if ! $first_match;
+    # if not info_url in certain language available => use other available
+    $info_url = $info_url_other_lang if ! $first_match;
 
-    $info_url =~ s/^\s+//g;
-    $info_url =~ s/\s+$//g;
-
-	return $info_url;
-
+    return $info_url;
 }
 
 sub get_value {
@@ -112,30 +106,27 @@ sub print_address2 {
 };
 
 # get institution address
+# TODO tohle kasle na jazykovou verzi a bere prvni adresu
 sub get_institution_address {
   my $r_xml = shift;
   my $index = shift;
 
   if( defined $r_xml->{ $index } ) {
-    my $xml = $r_xml->{ $index };
+      my $xml = $r_xml->{ $index };
 
-    my $address = "";
-
-    my @insts = $xml->getElementsByTagName( lib::OUT_BASE::ELEMENT_INSTITUTION );
-    foreach my $inst (@insts) {
-      my @addresses = $inst->getChildrenByTagName( lib::OUT_BASE::ELEMENT_ADDRESS );
+      my $address = '';
+      my @addresses = @{$xml->{'address'}};
       foreach my $addr (@addresses) {
-        my @street = $addr->getElementsByTagName( lib::OUT_BASE::ELEMENT_STREET );
-        my @city   = $addr->getElementsByTagName( lib::OUT_BASE::ELEMENT_CITY );
+	  my $street = $addr->{'street'}->{'data'};
+	  my $city   = $addr->{'city'}->{'data'};
 
-        if( defined $street[0] && defined $city[0] ) {
-	    $address = ($street[0]->getFirstChild->getData .", ". $city[0]->getFirstChild->getData);
-	    return $address;
-        }
+	  if( defined $street && defined $city ) {
+	      $address = $street.", ".$city;
+	      return $address;
+	  }
       }
-    }
   }
-	return "";
+  return "";
 }
 
 # get location address
@@ -197,86 +188,86 @@ sub get_loc_recursive {
 
 # get locations form xml
 sub get_locations {
-	my $r_realms = shift;
-	my $r_xml = shift;
-	my $index = shift;
-	my $node = shift;
-	my $lang = shift;
-	my $print_empty = shift;
+    my $r_realms = shift;
+    my $r_xml = shift;
+    my $index = shift;
+    my $node = shift;
+    my $lang = shift;
+    my $print_empty = shift;
 
-	my @locs;
+    my @locs;
 
-	my $loc_suffix = 1;
+    my $loc_suffix = 1;
 
-	if( defined $r_xml->{$index} ) {
-		my $xml = $r_xml->{$index};
-		
-		my @locations = $xml->getElementsByTagName( lib::OUT_BASE::ELEMENT_LOCATION );
-		foreach my $loc (@locations) {
-			# look for loc_name
-			my @loc_names = $loc->getElementsByTagName( lib::OUT_BASE::ELEMENT_LOCNAME );
+    if( defined $r_xml->{$index} ) {
+	my $xml = $r_xml->{$index};
 
-			my %realm_hash;
-			my $new_one;
+#	Dumper($xml->{location});
 
-      # look for loc_name in different language
-			foreach my $loc_name (@loc_names) {
-				next unless defined $loc_name;
-				next unless defined $loc_name->getFirstChild;
-				$new_one = $loc_name->getFirstChild->getData;
+	foreach my $loc (@{$xml->{location}}) {
+	    #warn Dumper($loc);
 
-				next if ! defined $new_one;
-				
+	    my %realm_hash;
+	    my $new_one;
 
-				my $aloc_name = $loc_name->getAttribute( 'lang' );
+	    # look for loc_name in different language
+	    foreach my $loc_name (@{$loc->{'loc_name'}}) {
+		next unless defined $loc_name;
 
-				#print "aloc_name\n";
-				#print Dumper $aloc_name;
-				#print Dumper $new_one;
+		#warn "LOC_NAME >>>>>> ".Dumper($loc_name);
+
+		#next unless defined $loc_name->getFirstChild;
+		$new_one = $loc_name->{'data'};
+
+		next if ! defined $new_one;
+
+		my $aloc_name = $loc_name->{'lang'};
+
+		#print "aloc_name\n";
+		#print Dumper $aloc_name;
+		#print Dumper $new_one;
 
 
-			  $realm_hash{lib::CONF_SHARED::ORGNAME."_".$aloc_name} = ( $new_one);
-				$realm_hash{lib::CONF_SHARED::ORGUNITNAME."_".$aloc_name} = ( $new_one);
-				$realm_hash{lib::CONF_SHARED::ACRONYM."_".$aloc_name} = ( $new_one);
-				$realm_hash{lib::CONF_SHARED::ACROUNIT."_".$aloc_name} = ( $new_one);
-		  }
-			
-			# if print empty => check if loc_name is defined 
-			if ($print_empty) {
-					if( ! defined $realm_hash{lib::CONF_SHARED::ORGNAME."_".$lang} ) {
-						$new_one = EMPTY_LOCNAME;
-						$realm_hash{lib::CONF_SHARED::ORGNAME."_".$lang} = ( $new_one);
-		        $realm_hash{lib::CONF_SHARED::ORGUNITNAME."_".$lang} = ( $new_one);
-		        $realm_hash{lib::CONF_SHARED::ACRONYM."_".$lang} = ( $new_one);
-		        $realm_hash{lib::CONF_SHARED::ACROUNIT."_".$lang} = ( $new_one);
+		$realm_hash{lib::CONF_SHARED::ORGNAME."_".$aloc_name} = ( $new_one);
+		$realm_hash{lib::CONF_SHARED::ORGUNITNAME."_".$aloc_name} = ( $new_one);
+		$realm_hash{lib::CONF_SHARED::ACRONYM."_".$aloc_name} = ( $new_one);
+		$realm_hash{lib::CONF_SHARED::ACROUNIT."_".$aloc_name} = ( $new_one);
+	    }
 
-					}
-			}
+	    # if print empty => check if loc_name is defined
+	    if ($print_empty) {
+		if( ! defined $realm_hash{lib::CONF_SHARED::ORGNAME."_".$lang} ) {
+		    $new_one = EMPTY_LOCNAME;
+		    $realm_hash{lib::CONF_SHARED::ORGNAME."_".$lang} = ( $new_one);
+		    $realm_hash{lib::CONF_SHARED::ORGUNITNAME."_".$lang} = ( $new_one);
+		    $realm_hash{lib::CONF_SHARED::ACRONYM."_".$lang} = ( $new_one);
+		    $realm_hash{lib::CONF_SHARED::ACROUNIT."_".$lang} = ( $new_one);
+		}
+	    }
 
-			my $new_index = $index."_".$loc_suffix;
-			#print Dumper $new_index;
+	    my $new_index = $index."_".$loc_suffix;
+	    #print Dumper $new_index;
 
-			$r_realms->{$new_index} = \%realm_hash;
+	    $r_realms->{$new_index} = \%realm_hash;
 
-			#print Dumper $r_realms->{$new_one}{lib::CONF_SHARED::ORGNAME." ".$lang};
-					
-			# inject node for hierarchy
-			my %known_realms;  # it is needed only for function call
-			if (defined($new_one)) {
-			  $known_realms{$new_one} = 1;
-			  insert_child( $node, $new_index, \$known_realms{$new_one} );
-			};
+	    #print Dumper $r_realms->{$new_one}{lib::CONF_SHARED::ORGNAME." ".$lang};
 
-			# inject xml data
-			$r_xml->{$new_index} = $loc;
+	    # inject node for hierarchy
+	    my %known_realms;  # it is needed only for function call
+	    if (defined($new_one)) {
+		$known_realms{$new_one} = 1;
+		insert_child( $node, $new_index, \$known_realms{$new_one} );
+	    };
 
-			# store counts of sons
-			$r_realms->{$index}{COUNTER_SON} = $loc_suffix;
+	    # inject xml data
+	    $r_xml->{$new_index} = $loc;
 
-			$loc_suffix++;
-				
-	  }
-  }
+	    # store counts of sons
+	    $r_realms->{$index}{COUNTER_SON} = $loc_suffix;
+
+	    $loc_suffix++;
+	}
+    }
 }
 
 # print row
@@ -372,60 +363,62 @@ sub print_row {
 
 # recursive function
 sub sort_and_print {
-  my $r_realms = shift;
-	my $tree = shift;
-	my $r_xml = shift;
-	my $r_out_handle = shift;
-	my $prefix = shift;
-	my $lang = shift;
-	my $type_desc = shift;
-	my $print_empty = shift;
+    my $r_realms = shift;
+    my $tree = shift;
+    my $r_xml = shift;
+    my $r_out_handle = shift;
+    my $prefix = shift;
+    my $lang = shift;
+    my $type_desc = shift;
+    my $print_empty = shift;
 
-	# select nodes from this level
-  my @nodes = $tree->children();
+    # select nodes from this level
+    my @nodes = $tree->children();
 
-  # sort by $type_desc and language
-	my @sorted = sort { sort_conf_data( $r_realms->{ $a->value }, $r_realms->{ $b->value }, $type_desc, $lang ) } @nodes;
+    #warn $type_desc;
+    #warn $lang;
 
-	foreach my $node (@sorted) {
-		my $deb_realm = $r_realms->{ $node->value };
+    # sort by $type_desc and language
+    my @sorted = sort { sort_conf_data( $r_realms->{ $a->value }, $r_realms->{ $b->value }, $type_desc, $lang ) } @nodes;
 
-		my $result = print_row( $r_realms, $r_xml, $node, $r_out_handle, $prefix, $lang, $type_desc, $print_empty);
+    foreach my $node (@sorted) {
+	my $deb_realm = $r_realms->{ $node->value };
 
-		next if $result;  # only one son => don't print
+	my $result = print_row( $r_realms, $r_xml, $node, $r_out_handle, $prefix, $lang, $type_desc, $print_empty);
 
-	  sort_and_print( $r_realms, $node, $r_xml, $r_out_handle, $prefix."  ", $lang, $type_desc, $print_empty ) if ! $node->is_leaf;	
-	}
+	next if $result;  # only one son => don't print
+
+	sort_and_print( $r_realms, $node, $r_xml, $r_out_handle, $prefix."  ", $lang, $type_desc, $print_empty ) if ! $node->is_leaf;
+    }
 }
 
 # out dokuwiki - exported api
 sub out_dokuwiki {
-  my $r_realms = shift;  # config data
-	my $tree = shift;  # tree depency
-	my $out_file = shift;  # output file
-	my $cachedir = shift;  # cache dir
-	my $ext_cache = shift;  # cache file extension
-	my $lang = shift;  # selected output language 
-	my $type_desc = shift;  # selected output description ( orgname || acronym )
-	my $print_empty = shift;  # print loc_names even without name
+    my $r_realms = shift;  # config data
+    my $tree = shift;  # tree depency
+    my $out_file = shift;  # output file
+    my $cachedir = shift;  # cache dir
+    my $ext_cache = shift;  # cache file extension
+    my $lang = shift;  # selected output language
+    my $type_desc = shift;  # selected output description ( orgname || acronym )
+    my $print_empty = shift;  # print loc_names even without name
 
-  
 
-	# pre-read xml from cache
-	my %xml = out_preread_xml( $r_realms, $cachedir, $ext_cache);  # xml data
-	
-	#add locations as containers
-  get_loc_recursive(  $r_realms, \%xml, $lang, $print_empty, $tree );
+    #warn Dumper($r_realms);
+    # pre-read xml from cache
+    my %xml = out_preread_xml( $r_realms, $cachedir, $ext_cache);  # xml data
 
-	my $handle = new IO::File;
-	open($handle, '>', $out_file) or log_die( "out_dokuwiki(): I can't open file ". $out_file ." for writing.");
+    #add locations as containers
+    get_loc_recursive(  $r_realms, \%xml, $lang, $print_empty, $tree );
 
-	my $prefix = "  ";  # first prefix is empty
-	
-	sort_and_print( $r_realms, $tree, \%xml, \$handle, $prefix, $lang, $type_desc, $print_empty );
+    my $handle = new IO::File;
+    open($handle, '>', $out_file) or log_die( "out_dokuwiki(): I can't open file ". $out_file ." for writing.");
 
-	close( $handle );
-	
+    my $prefix = "  ";  # first prefix is empty
+
+    sort_and_print( $r_realms, $tree, \%xml, \$handle, $prefix, $lang, $type_desc, $print_empty );
+
+    close( $handle );
 }
 
 

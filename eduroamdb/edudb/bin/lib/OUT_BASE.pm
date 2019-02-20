@@ -18,6 +18,7 @@ use Encode qw(encode decode);
 use locale;
 use POSIX qw(strftime locale_h);
 use lib::CONF_SHARED;
+use JSON;
 
 # !!! default language, get_desc used it, if $lan variable isn't defined
 use constant LANG_DEF => 'en';
@@ -123,30 +124,32 @@ sub get_element_data {
 
 # pre-read xml from cache (!!! cache is created by get_institution.pl )
 sub out_preread_xml {
-  my $r_realms = shift;
-  my $cachedir = shift;
-  my $ext_cache = shift;  
+    my $r_realms = shift;
+    my $cachedir = shift;
+    my $ext_cache = shift;
 
-  my %xml;
+    my %xml;
 
-   foreach my $realm (keys %$r_realms) {
-		#print Dumper( $realm );
-		my $f_cache = $cachedir."/".$realm.$ext_cache;
+    foreach my $realm (keys %$r_realms) {
+	my $f_cache = $cachedir."/".$realm.$ext_cache;
 
-		if( ! -f $f_cache ) {
-			log_it( LOG_INFO, "out_dokuwiki(): Cache file doesn't exists (". $f_cache ."), maybe virtual organization." );
-			next;
-		}
-
-		my $xml_parser = XML::LibXML->new();
-		my $xml_tree = $xml_parser->parse_file( $f_cache );
-		my $xml_root = $xml_tree->getDocumentElement;
-		$xml{ $realm } = $xml_root;
-
+	if( ! -f $f_cache ) {
+	    log_it( LOG_INFO, "out_dokuwiki(): Cache file doesn't exists (". $f_cache ."), maybe virtual organization." );
+	    next;
 	}
 
-  return %xml;
+	if (open(F, "$f_cache")) {
+	    my $json_string = join('', <F>);
+	    my $json = decode_json($json_string);
+	    close(F);
+	    $xml{ $realm } = $json;
+	} else {
+	    log_it( LOG_INFO, "out_dokuwiki(): Cache file (". $f_cache ."), failed to read: ".$! );
+	    next;
+	};
+    };
 
+    return %xml;
 }
 
 # convert coordinations to format used in kml
@@ -213,10 +216,11 @@ sub get_desc {
 # };
 
  foreach my $key (%{$r_realm}) {
-   next unless (exists($r_realm->{$key}));
-   log_it(LOG_INFO,
-	  "get_desc: there is not defined value ".join(', ', @tested_indexes).", using $key = ".latin1($r_realm->{$key}));
-   return '';
+     next unless (exists($r_realm->{$key}));
+     my $key_string = Dumper($r_realm->{$key});
+     log_it(LOG_INFO,
+	    "get_desc: there is not defined value ".join(', ', @tested_indexes).", using $key = ".$key_string);
+     return '';
  };
 
  return '';
@@ -224,41 +228,42 @@ sub get_desc {
 
 # sort
 sub sort_conf_data {
-	my $a_realm = shift;
-	my $b_realm = shift;
-	my $sortby = shift;
-	my $lang = shift;
+    my $a_realm = shift;
+    my $b_realm = shift;
+    my $sortby = shift;
+    my $lang = shift;
 
-	my $i1 = 0;
-	my $i2 = 0;
-	my $a;
-	my $b;
-  foreach my $index (split_desc($sortby)) {
-    my $data_index = $index.'_'.$lang;
+    my $i1 = 0;
+    my $i2 = 0;
+    my $a;
+    my $b;
 
-		if( defined $a_realm->{ $data_index } ) {
-			if ($i1==0) {
-			  $i1 = 1;
-			  $a = $a_realm->{ $data_index };
-			}
-		} elsif (($i1==0) && ( defined $a_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF } )) {
-			$i1 = 1;
-			$a = $a_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF };
-		}
+    foreach my $index (split_desc($sortby)) {
+	my $data_index = $index.'_'.$lang;
+
+	if( defined $a_realm->{ $data_index } ) {
+	    if ($i1==0) {
+		$i1 = 1;
+		$a = $a_realm->{ $data_index };
+	    }
+	} elsif (($i1==0) && ( defined $a_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF } )) {
+	    $i1 = 1;
+	    $a = $a_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF };
+	}
 
 
-		if( defined $b_realm->{ $data_index } ) {
-			if ($i2==0) {
-				$i2 = 1;
-				$b = $b_realm->{ $data_index };
-			}
-		} elsif (($i2==0) && ( defined $b_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF } )) {
-			$i2=1;
-			$b = $b_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF };
-		}
-					
-    return ( $a cmp $b ) if (($i1==1)&&($i2==1));
-  }
+	if( defined $b_realm->{ $data_index } ) {
+	    if ($i2==0) {
+		$i2 = 1;
+		$b = $b_realm->{ $data_index };
+	    }
+	} elsif (($i2==0) && ( defined $b_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF } )) {
+	    $i2=1;
+	    $b = $b_realm->{ $index.'_'.lib::OUT_BASE::LANG_DEF };
+	}
+
+	return ( $a cmp $b ) if (($i1==1)&&($i2==1));
+    }
 }
 
 

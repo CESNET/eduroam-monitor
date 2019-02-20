@@ -197,7 +197,7 @@ my $conn = new myPerlLDAP::conn({"host"   => $config->LDAPServer,
 
 my $sres = $conn->search($config->SearchBase,
 			 LDAP_SCOPE_SUBTREE,
-			 '(objectClass=eduRoamRealm)')
+			 '(&(objectClass=eduRoamRealm)(eduroamConnectionStatus=connected))')
     or die "Can't search: ".$conn->errorMessage;
 
 $sres->sort('cn');
@@ -210,7 +210,7 @@ my %k_inst_parent;
 while (my $realm = $sres->nextEntry) {
   my $organization = get_organization($realm);
   my $ID = create_id($realm, $organization);
-  my $inst_xml = get_institution_xml($realm);
+#  my $inst_xml = get_institution_xml($realm);
   my $inst_parent = get_institution_parent($realm, $organization);
   my $inst_parent_id = get_institution_parent_ID($inst_parent);
   my $org_name_cs = get_entry_string($organization, ['o'], ['cs']);
@@ -230,7 +230,7 @@ while (my $realm = $sres->nextEntry) {
 #    close(INST);
 #  };
 
-  next unless (defined($inst_xml));
+#  next unless (defined($inst_xml));
 
   # Poznamenat zname instituce
   $k_inst{$organization->dn} = $organization if defined($organization);
@@ -240,7 +240,7 @@ while (my $realm = $sres->nextEntry) {
   $cfg .= "# ".$realm->dn."\n";
   $cfg .= "[$ID]
 realm = ".join(', ', @{$realm->getValues('cn')})."\n";
-  $cfg .= "institution_xml = $inst_xml\n" if defined($inst_xml);
+#  $cfg .= "institution_xml = $inst_xml\n" if defined($inst_xml);
   $cfg .= "parent = $inst_parent_id\n" if defined($inst_parent_id);
   $cfg .= "org_name_en = $org_name_en\n" if defined($org_name_cs);
   $cfg .= "org_name_cs = $org_name_cs\n" if defined($org_name_cs);
