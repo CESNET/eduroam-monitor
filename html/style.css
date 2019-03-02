@@ -7,15 +7,16 @@ img {
     vertical-align:middle;
     border:0
 }
-*{border-collapse:collapse}
+#container{border-collapse:collapse}
 html{font-size:100%}
 body{
     font-family:"Segoe UI","Open Sans",sans-serif,serif;
     text-align: justify;
 }
 #container {
-    min-height:100%;
-    position:relative;
+  min-height:100%;
+  position:relative;
+  background-color:#ffffff;
 }
 ul {
   display:table-row;
@@ -178,5 +179,34 @@ li.level1 {
 .right {
     margin-left: 1rem;
     float: right;
+}
+
+/* vzhled položek v tagu <noscript> */
+#cesnet_linker_placeholder noscript {
+  display: block;
+  padding: 0 1em;
+  line-height: 44px;
+  border-bottom: 1px solid #999999;
+  color: #E1E5E9;
+}
+
+#cesnet_linker_placeholder noscript a {
+  color: #E1E5E9;
+  text-decoration: underline;
+}
+
+#cesnet_linker_placeholder noscript a:hover {
+  text-decoration: none;
+}
+
+#cesnet_linker_placeholder noscript .cl_actions {
+  float: right;
+  margin-left: 1em;
+}
+
+#cesnet_linker_placeholder noscript .cl_actions a {
+  display: inline;
+  padding: 5px;
+  text-decoration: none;
 }
 

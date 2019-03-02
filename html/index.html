@@ -2,18 +2,28 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>monitor.eduroam.cz</title>
     <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="stylesheet" href="style.css" type="text/css">
   </head>
   <body>
-    <div id="container">
       <!-- header -->
-      <div id="cesnet_linker_placeholder"></div>
+
+      <div id="cesnet_linker_placeholder">
+
+          <noscript>
+              <div class="cl_actions">
+              </div>
+              Nemáte povolený JavaScript. Přehled služeb e-infrastruktury CESNET získáte na stránce: <a href="http://cesnet.cz/sluzby">http://cesnet.cz/sluzby</a>.
+          </noscript>
+      </div>
+
       <script type="text/javascript" async="" src="https://linker2.cesnet.cz/linker.js"></script>
       <!-- end header -->
 
       <!-- content -->
+    <div id="container">
       <div class="main">
 	<div class="main_text">
 	  <h2>Monitoring eduroam infrastruktury</h2>
