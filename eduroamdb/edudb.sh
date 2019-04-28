@@ -23,6 +23,7 @@ then
       mv $CFG $CFG-$DATE
     fi
     mv $TMPF $CFG
+    logger "Created new config $CFG"
   else 
     logger "Builded config file $TMPF is suspiciously small"
     exit 1;
@@ -30,6 +31,7 @@ then
 else
     # config se nezmenil
     rm $TMPF
+    true
 fi
 
 # Build DokuWiki
