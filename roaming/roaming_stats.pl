@@ -592,6 +592,9 @@ sub loadLogFile {
     } elsif ($line =~ /radiator\[\d+\]: Using Net::SSLeay.*/) {
     } elsif ($line =~ /radiator\[\d+\]: sendTo: send to \S+ failed: Invalid argument/) {
     } elsif ($line =~ /radiator\[\d+\]: Malformed Vendor Specific Attribute/) {
+    } elsif ($line =~ /radiator\[\d+\]: .*at radius1.eduroam.cz$/) {
+    } elsif ($line =~ /radiator\[\d+\]: access-reject for/) {
+    } elsif ($line =~ /radiator\[\d+\]: Stream write error, disconnecting: Broken pipe/) {
     } else {
       warn "Unmatched line: $line\n";
     };
