@@ -218,7 +218,7 @@ sub get_desc {
  foreach my $key (%{$r_realm}) {
      next unless (exists($r_realm->{$key}));
      my $key_string = Dumper($r_realm->{$key});
-     log_it(LOG_INFO,
+     log_it(LOG_DEBUG,
 	    "get_desc: there is not defined value ".join(', ', @tested_indexes).", using $key = ".$key_string);
      return '';
  };
