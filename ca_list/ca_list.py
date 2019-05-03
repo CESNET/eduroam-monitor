@@ -21,8 +21,7 @@ for line in lines:
   org_name = '[[' + input_array[0].split(",")[0] + '|' + ",".join(input_array[0].split(",")[1:]) + ']]'
 
   # realms
-  #  # TODO - add newline to table
-  realms = ",".join(["@" + i for i in input_array[1].split(",")])
+  realms = ", ".join(["@" + i for i in input_array[1].split(",")])
 
   # cert info, use only CN field
   cert_info = input_array[2].split(",")
@@ -37,8 +36,7 @@ for line in lines:
       break
 
   # radius servers
-  # TODO - add newline to table
-  radius_servers = input_array[3].replace('\n', '')
+  radius_servers = input_array[3].replace('\n', '').replace(",", ", ")
 
   # final output
   print('| ' + org_name + ' | ' + realms + ' | ' + cert_info + ' | ' + radius_servers + ' |')
