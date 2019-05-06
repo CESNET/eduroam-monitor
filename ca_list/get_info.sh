@@ -1,20 +1,13 @@
 #!/bin/bash
 # ========================================================================================
 # generate list of organizations and the current EAP certs
-# output as a web page?
+# output in structured format, script ca_list.py generates the web content
 # ========================================================================================
-
-
-
-
-
-
-
 
 # ========================================================================================
 # main func
 # ========================================================================================
-function main2()
+function main()
 {
   # prochazet realmy v db ldap_to_icinga
   # -> objevi se i "neevidovane" realmy - guest.cesnet.cz
@@ -99,8 +92,9 @@ function main2()
 
     echo "$url,$org_name;$realm_list;$cert;$servers"
   done
-
-  
 }
 # ========================================================================================
-main2
+path="/var/lib/nagios/eap_cert_db/"
+coverage_path="/home/eduroamdb/eduroam-db/web/coverage/coverage_files/"
+# ========================================================================================
+main
