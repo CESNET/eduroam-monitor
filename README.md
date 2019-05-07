@@ -11,3 +11,5 @@ Repository with tools that are used to monitor & mantain Czech eduroam infrastru
 [roaming](roaming) historical system for graphing eduroam user authentications
 
 [matrix](matrix) eduroam availability matrix
+
+[ca_list](ca_list) list of organizations and CAs
