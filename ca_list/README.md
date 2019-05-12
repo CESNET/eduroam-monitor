@@ -16,6 +16,13 @@ To generate the output, just simply run:
 
 To help users get info about the CAs, list of known CAs is available in `cert_db.py`. Links for CA names which are configured in this file are generated in the output file instead of CA names.
 
+
+## sample output
+
+```
+TODO
+```
+
 ## TODO
 
 - direct links download the CAs that issued the EAP certs?
