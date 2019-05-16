@@ -84,6 +84,11 @@ function main()
 
     # TODO - check if URL is available
     url=$(jq '.info_URL[0].data' "$coverage_path/$org.json" | tr -d '"')
+    if [[ "$url" == "null" ]]
+    then
+      : # TODO
+    fi
+
     org_name=$(jq '.inst_name[0].data' "$coverage_path/$org.json" | tr -d '"')
 
     # TODO - proper db access
