@@ -17,35 +17,6 @@ function main()
   
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # vyuzit eap_cert_db
-  # iterovat nad vsemi *pem soubory
-
-  path="/var/lib/nagios/eap_cert_db/"
-  coverage_path="/home/eduroamdb/eduroam-db/web/coverage/coverage_files/"
-
-
-  # v tomto pripade by se mohl grepovat realm v cilovem souboru a pripadne by se tam nemusel pridavat
-  # ale co zmeny certifikatu?  
-
-  > /tmp/cert_db_data.txt
-
-
   # TODO - jak to dopadne s linky na certifikaty?
   for i in $path*eap.pem
   do
