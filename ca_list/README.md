@@ -37,6 +37,7 @@ Output is in the dokuwiki format for ease of direct inclusion in the wiki.
 
 ## TODO
 
-- direct links download the CAs that issued the EAP certs?
+- direct links to download the CAs that issued the EAP certs?
+- links to download certs for institutions that are present in CAT?
 - git repo of the CAs to display additional info if the CA changes?
 
