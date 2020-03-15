@@ -459,6 +459,7 @@ sub loadLogFile {
 		  '195.178.64.172' => 1,  # saint.cesnet.cz
 		  '195.113.134.138' => 1, # semik.cesnet.cz
 		  '195.113.187.33' => 1,  # ermon.cesnet.cz
+          '145.100.189.26' => 1, # SURFnet - dynamicky radsec?
 		 };
   my $renameIP = {
 		  '195.113.44.30' => '195.113.15.22',    # ajias01.jinonice.cuni.cz => radius1.eduroam.cuni.cz
@@ -595,6 +596,9 @@ sub loadLogFile {
     } elsif ($line =~ /radiator\[\d+\]: .*at radius1.eduroam.cz$/) {
     } elsif ($line =~ /radiator\[\d+\]: access-reject for/) {
     } elsif ($line =~ /radiator\[\d+\]: Stream write error, disconnecting: Broken pipe/) {
+    } elsif ($line =~ /radiator\[\d+\]: Disabling KeepaliveTimeout for farm child instance/) {
+    } elsif ($line =~ /radiator\[\d+\]: Creating a shared cache file .+ a duplicate detection/) {
+    } elsif ($line =~ /radiator\[\d+\]: Stream MaxBufferSize exceeded, disconnecting/ {
     } else {
       warn "Unmatched line: $line\n";
     };
